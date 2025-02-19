@@ -1,0 +1,40 @@
+﻿@model List<TeacherInfo>
+@{
+    ViewData["Title"] = "Home Page";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body style="font-family: Arial, sans-serif">
+
+    <div class="data_1">
+    <form asp-action="GetTeacher" method="get">     
+            <input placeholder="Teacher" list="List" type="text" name="Surname"/>
+            <datalist id="List">
+                @foreach(var item in Model)
+                {
+                    if (item.TeacherSurname != "")
+                    {
+                        <option id="" value="@item.TeacherSurname @item.TeacherName @item.TeacherPatronymic"></option>
+                    }
+                }
+            </datalist>
+
+            <input placeholder="Group" list="list" type="text" name="Group" />
+            <datalist id="list">
+                @foreach (var item in Model)
+                {
+                    <option id="" value="@item.GroupName"></option>
+                }
+            </datalist>
+            <input type="date" name="Date" />
+
+            <input type="submit" value="Send" />
+    </form>
+    </div>
+</body>
+</html>
