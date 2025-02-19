@@ -197,7 +197,7 @@ public class RootRepository
     public List<LessonInfo> SaturdayOutput(string group, DateTime startSemester, DateTime today)
     {
         int num = WeekСhecker(startSemester, today);
-        int count = 0;
+        int count = 1;
         int obs = 0;
         double var2 = today.DayOfYear - startSemester.DayOfYear;  
         for (int i = 0; i <= var2; i++)
@@ -213,7 +213,8 @@ public class RootRepository
             }
 
         }
-        DateTime d = DayOfWeek(count);
+        var s = ((DayOfWeek)count).ToString();
+        var res = startSemester.DayOfWeek.ToString();    
         obs = num / 5;
         var list = new List<LessonInfo>();
         if (obs % 2 != 0)
@@ -249,7 +250,7 @@ public class RootRepository
              .Where(d => d.day.day == ((DayOfWeek)count).ToString().ToUpper())
 
              .SelectMany(sd => sd.day.Classes, (sd, classItem) => new { sd.schedule, sd.day, classItem })
-             .Where(x => x.classItem.Weeks.Even != null)
+             .Where(x => x.classItem.Weeks.Odd != null)
              .Select(x => new LessonInfo
              {
                  Day = "SATURDAY",
