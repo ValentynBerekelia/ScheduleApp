@@ -40,6 +40,11 @@ public class RootRepository
         return context.Roots;
     }
 
+
+    //UPD: Змінено ф-цію SearchForTeacher - добавлено перевірку на парність тиждня
+    //Дороблено пошук по даті + групі
+    //Нова ф-ці OddsOfWeek
+
     public List<TeacherInfo> TeacherList()
     {
         var teacher = context.Roots
@@ -68,52 +73,106 @@ public class RootRepository
 
 
     //ScheduleController
-    public List<LessonInfo> SearchForTeacher(string surname)
+    //Має перевіряти чи є пари у суботу у конкретного викладача(DateTime.Today)
+    public List<LessonInfo> SearchForTeacher(string surname) //зробити окрему View для даної ф-ції
     {
+        List<LessonInfo> lesson = new();
+        var Start = context.Roots.Select(r => r.Semester.StartDay).ToList();
+        DateTime startSemester = DateTime.Parse(Start[0]);
+        int num = OddsOfWeek(startSemester, DateTime.Today);
         //перевірка на парність/непарність тижня
-        var lesson = context.Roots
-              .SelectMany(r => r.Schedule)
-              .SelectMany(s => s.Days, (schedule, day) => new { schedule, day })
-              .SelectMany(sd => sd.day.Classes, (sd, classItem) => new { sd.schedule, sd.day, classItem })
-              .Where(s => s.classItem.Weeks.Even.Teacher.Surname + " " + s.classItem.Weeks.Even.Teacher.Name + " " + s.classItem.Weeks.Even.Teacher.Patronymic == surname)
-              .GroupBy(g => new
-              {
-                  g.classItem.Weeks.Even.Teacher.Name,
-                  g.classItem.Weeks.Even.Teacher.Surname,
-                  g.classItem.Weeks.Even.Teacher.Patronymic,
-                  g.day.day,
-                  g.classItem.Weeks.Even.SubjectForSite,
-                  g.classItem.Class.EndTime,
-                  g.classItem.Class.StartTime,
-                  g.classItem.Weeks.Even.LessonType,
-                  RoomName = g.classItem.Weeks.Even.Room.Name
-              })
-              .Select(g => new LessonInfo
-              {
-                  Day = g.Key.day,
-                  TeacherName = g.Key.Name,
-                  TeacherPatronymic = g.Key.Patronymic,
-                  TeacherSurname = g.Key.Surname,
-                  GroupTitle = string.Join(", ", g.Select(x => x.schedule.Group.Title)),
-                  Subject = g.Key.SubjectForSite,
-                  EndTime = g.Key.EndTime,
-                  StartTime = g.Key.StartTime,
-                  LessonType = g.Key.LessonType,
-                  RoomName = g.Key.RoomName
-              }).OrderBy(x=>x.StartTime).ToList();
-
+        if (num % 2 == 0)
+        {
+            lesson = context.Roots
+                  .SelectMany(r => r.Schedule)
+                  .SelectMany(s => s.Days, (schedule, day) => new { schedule, day })
+                  .SelectMany(sd => sd.day.Classes, (sd, classItem) => new { sd.schedule, sd.day, classItem })
+                  .Where(s => s.classItem.Weeks.Even.Teacher.Surname + " " + s.classItem.Weeks.Even.Teacher.Name + " " + s.classItem.Weeks.Even.Teacher.Patronymic == surname)
+                  .GroupBy(g => new
+                  {
+                      g.classItem.Weeks.Even.Teacher.Name,
+                      g.classItem.Weeks.Even.Teacher.Surname,
+                      g.classItem.Weeks.Even.Teacher.Patronymic,
+                      g.day.day,
+                      g.classItem.Weeks.Even.SubjectForSite,
+                      g.classItem.Class.EndTime,
+                      g.classItem.Class.StartTime,
+                      g.classItem.Weeks.Even.LessonType,
+                      RoomName = g.classItem.Weeks.Even.Room.Name
+                  })
+                  .Select(g => new LessonInfo
+                  {
+                      Day = g.Key.day,
+                      TeacherName = g.Key.Name,
+                      TeacherPatronymic = g.Key.Patronymic,
+                      TeacherSurname = g.Key.Surname,
+                      GroupTitle = string.Join(", ", g.Select(x => x.schedule.Group.Title)),
+                      Subject = g.Key.SubjectForSite,
+                      EndTime = g.Key.EndTime,
+                      StartTime = g.Key.StartTime,
+                      LessonType = g.Key.LessonType,
+                      RoomName = g.Key.RoomName
+                  }).OrderBy(x => x.StartTime).ToList();
+        }
+        else
+        {
+            lesson = context.Roots
+      .SelectMany(r => r.Schedule)
+      .SelectMany(s => s.Days, (schedule, day) => new { schedule, day })
+      .SelectMany(sd => sd.day.Classes, (sd, classItem) => new { sd.schedule, sd.day, classItem })
+      .Where(s => s.classItem.Weeks.Odd.Teacher.Surname + " " + s.classItem.Weeks.Odd.Teacher.Name + " " + s.classItem.Weeks.Odd.Teacher.Patronymic == surname)
+      .GroupBy(g => new
+      {
+          g.classItem.Weeks.Odd.Teacher.Name,
+          g.classItem.Weeks.Odd.Teacher.Surname,
+          g.classItem.Weeks.Odd.Teacher.Patronymic,
+          g.day.day,
+          g.classItem.Weeks.Odd.SubjectForSite,
+          g.classItem.Class.EndTime,
+          g.classItem.Class.StartTime,
+          g.classItem.Weeks.Odd.LessonType,
+          RoomName = g.classItem.Weeks.Odd.Room.Name
+      })
+      .Select(g => new LessonInfo
+      {
+          Day = g.Key.day,
+          TeacherName = g.Key.Name,
+          TeacherPatronymic = g.Key.Patronymic,
+          TeacherSurname = g.Key.Surname,
+          GroupTitle = string.Join(", ", g.Select(x => x.schedule.Group.Title)),
+          Subject = g.Key.SubjectForSite,
+          EndTime = g.Key.EndTime,
+          StartTime = g.Key.StartTime,
+          LessonType = g.Key.LessonType,
+          RoomName = g.Key.RoomName
+      }).OrderBy(x => x.StartTime).ToList();
+        }
         return lesson;
     }
 
     //GroupController
     public static int WeekСhecker(DateTime Start, DateTime Today)
     {
-        int count = 0;//1
+        int count = 0;//1!
         double var2 = Today.DayOfYear - Start.DayOfYear;
         for (int i = 0; i < var2; i++)
         {
             DateTime timeNext = Start.AddDays(i);
             if (timeNext.DayOfWeek == DayOfWeek.Sunday)
+            {
+                count += 1;
+            }
+        }
+        return count;
+    }
+    public static int OddsOfWeek(DateTime Start, DateTime Today)
+    {
+        int count = 1;//0!
+        double var2 = Today.DayOfYear - Start.DayOfYear;
+        for (int i = 0; i < var2; i++)
+        {
+            DateTime timeNext = Start.AddDays(i);
+            if (timeNext.DayOfWeek == DayOfWeek.Saturday)
             {
                 count += 1;
             }
@@ -171,32 +230,11 @@ public class RootRepository
         return listResult;
     }
 
-    public int evenNumber(DateTime startSemester)
-    {
-        DateTime today = DateTime.Today;
-        int count = 0;
-        int obs = 0;
-        double var2 = today.DayOfYear - startSemester.DayOfYear;
-        for(int i = 0; i <= var2; i++)
-        {
-            DateTime timeNext = startSemester.AddDays(i);
-            if(timeNext.DayOfWeek == DayOfWeek.Sunday)
-            {
-                count += 1;
-                if(count > 5)
-                {
-                    count = 1;
-                }
-            }
-        }
-        return obs / 5;
-    }
-
 
 
     public List<LessonInfo> SaturdayOutput(string group, DateTime startSemester, DateTime today)
     {
-        int num = WeekСhecker(startSemester, today);
+        int num = OddsOfWeek(startSemester, today);
         int count = 1;
         int obs = 0;
         double var2 = today.DayOfYear - startSemester.DayOfYear;  
@@ -290,7 +328,7 @@ public class RootRepository
         foreach (var root in roots) {
             DateTime StartSemester = DateTime.Parse(root.StartDay);
 
-            int number = WeekСhecker(StartSemester, today);
+            int number = OddsOfWeek(StartSemester, today);
             int dayWeek = WeekСhecker(startSaturday, today);
             if (number % 2 == 0)
             {
@@ -317,29 +355,74 @@ public class RootRepository
     //Конкретна дата + група
     public List<LessonInfo> SearchByDate(string group,DateTime date)
     {
-        var lesson = context.Roots
-           .SelectMany(r => r.Schedule)
-            .Where(r => r.Group.Title == group)
-            .SelectMany(s => s.Days, (schedule, day) => new { schedule, day })
-            .SelectMany(sd => sd.day.Classes, (sd, classItem) => new { sd.schedule, sd.day, classItem })
-            .Where(x => x.classItem.Weeks.Odd != null)
-            .Where(r => r.schedule.Group.Title == group)
-            .Where(d=>d.day.day == date.DayOfWeek.ToString().ToUpper())
-            .Select(s => new LessonInfo
-            {
-                Day = s.day.day,
-                TeacherName = s.classItem.Weeks.Even.Teacher.Name,
-                TeacherPatronymic = s.classItem.Weeks.Even.Teacher.Patronymic,
-                TeacherSurname = s.classItem.Weeks.Even.Teacher.Surname,
-                GroupTitle = s.schedule.Group.Title,
-                Subject = s.classItem.Weeks.Even.SubjectForSite,
-                EndTime = s.classItem.Class.EndTime,
-                StartTime = s.classItem.Class.StartTime,
-                LessonType = s.classItem.Weeks.Even.LessonType,
-                RoomName = s.classItem.Weeks.Even.Room.Name
-            }).ToList();
+        //тимчасові дані
+        var d1 = "17/02/2025";
+        var d2 = "30/03/2025";
+        DateTime startSaturday = DateTime.Parse(d1);//ці дані потрібно буде звідкись брати
+        DateTime endSaturaday = DateTime.Parse(d2);
+        //
 
-        return lesson;
+        var Start = context.Roots.Select(r => r.Semester.StartDay).ToList();
+        DateTime startSemester = DateTime.Parse(Start[0]);
+        int num = OddsOfWeek(startSemester, date);
+        //int obs = num / 5;
+        List<LessonInfo> lesson = new();
+        if (date.DayOfWeek == DayOfWeek.Saturday)
+        {
+            return SaturdayOutput(group, startSaturday, date);
+        }
+        else
+        {
+            if (num % 2 == 0)
+            {
+                lesson = context.Roots
+                .SelectMany(r => r.Schedule)
+                .Where(r => r.Group.Title == group)
+                .SelectMany(s => s.Days, (schedule, day) => new { schedule, day })
+                .SelectMany(sd => sd.day.Classes, (sd, classItem) => new { sd.schedule, sd.day, classItem })
+                .Where(x => x.classItem.Weeks.Even != null)
+                .Where(r => r.schedule.Group.Title == group)
+                .Where(d => d.day.day == date.DayOfWeek.ToString().ToUpper())
+                .Select(s => new LessonInfo
+                { 
+                    Day = s.day.day,
+                    TeacherName = s.classItem.Weeks.Even.Teacher.Name,
+                    TeacherPatronymic = s.classItem.Weeks.Even.Teacher.Patronymic,
+                    TeacherSurname = s.classItem.Weeks.Even.Teacher.Surname,
+                    GroupTitle = s.schedule.Group.Title,
+                    Subject = s.classItem.Weeks.Even.SubjectForSite,
+                    EndTime = s.classItem.Class.EndTime,
+                    StartTime = s.classItem.Class.StartTime,
+                    LessonType = s.classItem.Weeks.Even.LessonType,
+                    RoomName = s.classItem.Weeks.Even.Room.Name
+                }).ToList();
+            }
+            else
+            {
+                lesson = context.Roots
+                .SelectMany(r => r.Schedule)
+                .Where(r => r.Group.Title == group)
+                .SelectMany(s => s.Days, (schedule, day) => new { schedule, day })
+                .SelectMany(sd => sd.day.Classes, (sd, classItem) => new { sd.schedule, sd.day, classItem })
+                .Where(x => x.classItem.Weeks.Odd != null)
+                .Where(r => r.schedule.Group.Title == group)
+                .Where(d => d.day.day == date.DayOfWeek.ToString().ToUpper())
+                .Select(s => new LessonInfo
+                {
+                    Day = s.day.day,
+                    TeacherName = s.classItem.Weeks.Odd.Teacher.Name,
+                    TeacherPatronymic = s.classItem.Weeks.Odd.Teacher.Patronymic,
+                    TeacherSurname = s.classItem.Weeks.Odd.Teacher.Surname,
+                    GroupTitle = s.schedule.Group.Title,
+                    Subject = s.classItem.Weeks.Odd.SubjectForSite,
+                    EndTime = s.classItem.Class.EndTime,
+                    StartTime = s.classItem.Class.StartTime,
+                    LessonType = s.classItem.Weeks.Odd.LessonType,
+                    RoomName = s.classItem.Weeks.Odd.Room.Name
+                }).ToList();
+            }
+        }
+         return lesson;
         //потрібно враховувати суботи
         //шукає потрібний день за допомогою DayOfYear так можна буде врахорвувати суботи
         //змінити сам вивід,має виводити тільки 1 день на сам сайт(це міняти в View)
@@ -349,7 +432,9 @@ public class RootRepository
         //Перевірка на входження в ренж навчання по суботам(якщо воно є)
         //Врахування парності тижня за допомогою ф-ції WeekCheker
     }
- 
+
+    //Викладач + група виводить пари тільки в конкретній групі
+    
 }
 
 

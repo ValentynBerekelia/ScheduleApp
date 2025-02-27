@@ -28,6 +28,7 @@ namespace ScheduleApp.Controllers
 
 
         [HttpGet]
+        //розклад має виводитись на головній сторінці,а не переходити на інші
         public IActionResult GetTeacher(string surname,string group,DateTime date)
         {
             if (group != null && surname == null && date.Year < 2000)

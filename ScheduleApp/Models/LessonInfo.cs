@@ -2,6 +2,7 @@
 {
     public class LessonInfo
     {
+        public string WeekType { get; set; } = string.Empty;
         public string LessonType { get; set; } = string.Empty;
         public string RoomName { get; set; } = string.Empty;
         public string TeacherName { get; set; } = string.Empty;
