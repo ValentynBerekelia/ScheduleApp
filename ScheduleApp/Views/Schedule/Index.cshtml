@@ -1,19 +1,22 @@
 ﻿@model List<TeacherInfo>
 @{
-    ViewData["Title"] = "Home Page";
+ViewData["Title"] = "Home Page";
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="~/css/site.css" />
+   
 </head>
-<body style="font-family: Arial, sans-serif">
+<body>
+    <div class="box">
+    <form asp-action="GetTeacher" method="get">   
 
-    <div class="data_1">
-    <form asp-action="GetTeacher" method="get">     
-            <input placeholder="Teacher" list="List" type="text" name="Surname"/>
+            <div class="container-1">
+            <input placeholder="Teacher" list="List" type="text" name="Surname"/>     
             <datalist id="List">
                 @foreach(var item in Model)
                 {
@@ -32,8 +35,10 @@
                 }
             </datalist>
             <input type="date" name="Date" />
-
-            <input type="submit" value="Send" />
+            </div>
+            <div class="container-2">
+            <input type="submit" value="Відправити" />
+            </div>
     </form>
     </div>
 </body>
