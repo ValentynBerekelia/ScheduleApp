@@ -26,7 +26,7 @@ namespace ScheduleApp.Controllers
             return View(list);
         }
 
-
+        //Зробити підсвітку конкретного дня/можливо конкретної пари
         [HttpGet]
         //розклад має виводитись на головній сторінці,а не переходити на інші
         public IActionResult GetTeacher(string surname,string group,DateTime date)
@@ -34,7 +34,7 @@ namespace ScheduleApp.Controllers
             if (group != null && surname == null && date.Year < 2000)
             {
                 var result = _rootRepository.Group(group);
-                return RedirectToAction("GetGroup", "Group", new { group });
+                return RedirectToAction("getGroup", "Group", new { group });
             }
             else if(group == null && surname != null && date.Year < 2000)
             {

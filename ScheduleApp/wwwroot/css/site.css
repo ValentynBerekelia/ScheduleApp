@@ -8,7 +8,8 @@ html {
     }
 }
 body {
-    background: #343d46;
+    background: #F0F8FF;
+    font-family: Roboto, Helvetica Neue, sans-serif;
 }
 
 .box {
@@ -72,4 +73,45 @@ input::placeholder {
     font-weight: bold;
     opacity: 0.5;
     color: black;
+}
+/*стилі таблиці*/
+table {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: auto;
+    height: auto;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+tr {
+    border: 1px solid black;
+}
+
+td {
+    border: 1px solid black;
+    width: 150px;
+    height: 100px;
+}
+th {
+    border: 1px solid black;
+}
+.time {
+    border: 1px solid black;
+    width: 50px;
+    height: 100px;
+}
+.table {
+    position: absolute;
+    top: 53%;/*fix*/
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
+
+nav {
+    top:auto;
+    background-color: gray;
+    color: white;
+    padding:10px;
 }

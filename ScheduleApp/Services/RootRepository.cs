@@ -102,6 +102,7 @@ public class RootRepository
                   })
                   .Select(g => new LessonInfo
                   {
+                      WeekType = "Even",
                       Day = g.Key.day,
                       TeacherName = g.Key.Name,
                       TeacherPatronymic = g.Key.Patronymic,
@@ -135,6 +136,7 @@ public class RootRepository
       })
       .Select(g => new LessonInfo
       {
+          WeekType = "Odd",
           Day = g.Key.day,
           TeacherName = g.Key.Name,
           TeacherPatronymic = g.Key.Patronymic,
@@ -190,6 +192,7 @@ public class RootRepository
             .Where(r => r.schedule.Group.Title == group)
             .Select(x => new LessonInfo
             {
+                WeekType = "Odd",
                 Day = x.day.day,
                 TeacherName = x.classItem.Weeks.Odd.Teacher.Name,
                 TeacherPatronymic = x.classItem.Weeks.Odd.Teacher.Patronymic,
@@ -215,6 +218,7 @@ public class RootRepository
             .Where(r => r.schedule.Group.Title == group)
             .Select(x => new LessonInfo
             {
+                WeekType = "Even",
                 Day = x.day.day,
                 TeacherName = x.classItem.Weeks.Even.Teacher.Name,
                 TeacherPatronymic = x.classItem.Weeks.Even.Teacher.Patronymic,
@@ -267,6 +271,7 @@ public class RootRepository
              .Where(x => x.classItem.Weeks.Even != null)
              .Select(x => new LessonInfo
              {
+                 WeekType = "Even",
                  Day = "SATURDAY",
                  TeacherName = x.classItem.Weeks.Even.Teacher.Name,
                  TeacherPatronymic = x.classItem.Weeks.Even.Teacher.Patronymic,
@@ -291,6 +296,7 @@ public class RootRepository
              .Where(x => x.classItem.Weeks.Odd != null)
              .Select(x => new LessonInfo
              {
+                 WeekType = "Odd",
                  Day = "SATURDAY",
                  TeacherName = x.classItem.Weeks.Odd.Teacher.Name,
                  TeacherPatronymic = x.classItem.Weeks.Odd.Teacher.Patronymic,
@@ -301,7 +307,7 @@ public class RootRepository
                  StartTime = x.classItem.Class.StartTime,
                  LessonType = x.classItem.Weeks.Odd.LessonType,
                  RoomName = x.classItem.Weeks.Odd.Room.Name
-            }).OrderBy(x => x.StartTime).ToList();
+             }).OrderBy(x => x.StartTime).ToList();
         }
 
         return list;
@@ -384,7 +390,7 @@ public class RootRepository
                 .Where(r => r.schedule.Group.Title == group)
                 .Where(d => d.day.day == date.DayOfWeek.ToString().ToUpper())
                 .Select(s => new LessonInfo
-                { 
+                {
                     Day = s.day.day,
                     TeacherName = s.classItem.Weeks.Even.Teacher.Name,
                     TeacherPatronymic = s.classItem.Weeks.Even.Teacher.Patronymic,
