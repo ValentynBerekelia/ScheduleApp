@@ -15,9 +15,11 @@ builder.Services.AddHttpClient<JSONDeserializer>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<RootRepository>();
 
+builder.Services.AddSession();
+
 
 var app = builder.Build();
-
+app.UseSession();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -30,10 +32,13 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapControllerRoute(
+    name: "admin",
+    pattern: "Admin/{action=Dashboard}/{id?}",
+    new { controller = "Admin" });
 
 app.MapControllerRoute(
     name: "default",

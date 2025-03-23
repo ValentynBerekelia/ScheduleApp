@@ -36,5 +36,7 @@ namespace ScheduleApp.Services
         public DbSet<SemesterClass> SemesterClasses { get; set; } = null!;
         public DbSet<Teacher> Teachers { get; set; } = null!;
         public DbSet<Weeks> Weeks { get; set; } = null!;
+
+        public DbSet<SaturdayClass> SaturdayClasses { get; set; } = null!;
     }
 }

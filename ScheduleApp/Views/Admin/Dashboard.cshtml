@@ -1,0 +1,46 @@
+﻿@model SaturdayClass
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="~/css/site.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <nav>
+        <a class="navbar-brand" asp-area="" asp-controller="Schedule" asp-action="index">Home</a>
+    </nav>
+    <div class="form-container">
+        <div class="form-1">
+    <form method="post" asp-controller="Admin" asp-action="AddData">
+    @using (Html.BeginForm())
+    {
+        @Html.LabelFor(model => model.StartSaturday, "Start saturday")
+        <br />
+        @Html.EditorFor(model => model.StartSaturday)
+        <br />
+        @Html.LabelFor(model => model.EndSaturday, "End saturday")
+        <br />
+        @Html.EditorFor(model => model.EndSaturday)
+        <br />
+        @Html.LabelFor(model => model.WeekType, "Week type")
+        <br />
+        @Html.EditorFor(model => model.WeekType)
+        <br />
+        <input type="submit" value="Добавить" />
+        <br />
+    }
+    </form>
+        </div>
+    <div class="form-2">
+        <form method="post" asp-controller="Admin" asp-action="Delete">       
+           <input type="submit" value="Delete" />
+        </form>
+    </div>
+    </div>
+</body>
+</html>

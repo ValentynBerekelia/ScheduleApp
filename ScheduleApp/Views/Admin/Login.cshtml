@@ -1,0 +1,26 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h2>Admin Login</h2>
+
+    @if (ViewBag.Error != null)
+    {
+            <p style="color: red;">@ViewBag.Error</p>
+    }
+
+    <form method="post" action="/Admin/Login">
+        <label for="password">Enter password:</label>
+        <input type="password" name="password" required />
+        <button type="submit">Login</button>
+    </form>
+</body>
+</html>
