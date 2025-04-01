@@ -1,12 +1,15 @@
 ﻿@model List<LessonInfo>
+
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Schedule";
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Schedule</title>
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
@@ -15,52 +18,38 @@
             <a class="navbar-brand" asp-area="" asp-controller="Schedule" asp-action="index">Home</a>
         </div>
     </nav>
-    <div class="text-center">
-        <table class="table">
-            <caption>
-                @Model[0].WeekType Week
-            </caption>
-            <thead>
-                <tr>
-                    <th>Time</th>
-                    <th>Monday</th>
-                    <th>Tuesday</th>
-                    <th>Wednesday</th>
-                    <th>Thursday</th>
-                    <th>Friday</th>
-                    <th>Saturday</th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    string[] timeSlots = { "08:20 - 09:40", "09:50 - 11:10", "11:30 - 12:50", "13:00 - 14:20", "14:40 - 16:00" };
-                }
-                @foreach (var time in timeSlots)
-                {
-                    <tr>
-                        <td class="time">@time</td>
-                        @for (int i = 1; i <= 6; i++)
-                        {
-                            <td>
-                                @{
-                                    var lesson = Model.FirstOrDefault(d => d.Day == ((DayOfWeek)i).ToString().ToUpper() && d.StartTime == time.Split(" - ")[0]);
-                                }
-                                @if (lesson != null)
-                                {
-                                    <p>
-                                        @lesson.GroupTitle<br>
-                                        @lesson.Subject<br>
-                                        @lesson.LessonType<br>
-                                        @lesson.RoomName<br>
-                                        @lesson.TeacherSurname @lesson.TeacherName @lesson.TeacherPatronymic
-                                    </p>
-                                }
-                            </td>
-                        }
-                    </tr>
-                }
-            </tbody>
-        </table>
+    <h3>@Model[0].GroupTitle group / @Model[0].WeekType Week</h3>
+    <div class="schedule">
+        <div class="header">Time</div>
+        <div class="header">Monday</div>
+        <div class="header">Tuesday</div>
+        <div class="header">Wednesday</div>
+        <div class="header">Thursday</div>
+        <div class="header">Friday</div>
+        <div class="header">Saturday</div>
+
+        @{
+            string[] timeSlots = { "08:20 - 09:40", "09:50 - 11:10", "11:30 - 12:50", "13:00 - 14:20", "14:40 - 16:00" };
+        }
+        @foreach (var time in timeSlots)
+        {
+            <div class="time">@time</div>
+            @for (int i = 1; i <= 6; i++)
+            {
+                var lesson = Model.FirstOrDefault(d => d.Day == ((DayOfWeek)i).ToString().ToUpper() && d.StartTime == time.Split(" - ")[0]);
+                <div>
+                    @if (lesson != null)
+                    {
+                        <p>
+                            @lesson.Subject<br>
+                            @lesson.LessonType<br>
+                            @lesson.RoomName<br>
+                            @lesson.TeacherSurname @lesson.TeacherName @lesson.TeacherPatronymic
+                        </p>
+                    }
+                </div>
+            }
+        }
     </div>
 </body>
 </html>

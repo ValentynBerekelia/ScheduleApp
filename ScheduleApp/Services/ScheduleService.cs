@@ -340,7 +340,7 @@ public class ScheduleService
             .Select(r => r.Semester).ToList();
 
         foreach (var root in roots) {
-            DateTime StartSemester = DateTime.Parse(root.StartDay);
+            DateTime StartSemester = DateTime.ParseExact(root.StartDay,"dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
 
             int number = OddsOfWeek(StartSemester, today);
             int dayWeek = WeekСhecker(startSaturday, today);
@@ -379,7 +379,7 @@ public class ScheduleService
         }
 
         var Start = context.Roots.Select(r => r.Semester.StartDay).ToList();
-        DateTime startSemester = DateTime.Parse(Start[0]);
+        DateTime startSemester = DateTime.ParseExact(Start[0].ToString(), "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
         int num = OddsOfWeek(startSemester, date);
         //int obs = num / 5;
         List<LessonInfo> lesson = new();
@@ -439,14 +439,6 @@ public class ScheduleService
             }
         }
          return lesson;
-        //потрібно враховувати суботи
-        //шукає потрібний день за допомогою DayOfYear так можна буде врахорвувати суботи
-        //змінити сам вивід,має виводити тільки 1 день на сам сайт(це міняти в View)
-        //Бажано зробити сьогодні
-
-        //UPD:
-        //Перевірка на входження в ренж навчання по суботам(якщо воно є)
-        //Врахування парності тижня за допомогою ф-ції WeekCheker
     }
 
     //Викладач + група виводить пари тільки в конкретній групі
