@@ -17,8 +17,8 @@ body {
     margin: 100px auto;
     width: 300px;
     height: 400px;
-    background-color: #c3c8d5;
-    border-radius: 50px;
+    background-color: #F0F8FF;
+    box-shadow:8px 8px 12px 5px gray;
 }
 
 .container-1 {
@@ -35,7 +35,7 @@ body {
         color: black;
         width: 200px;
         height: 40px;
-        background: #72798c;
+        background: white;
         border: none;
         font-size: 10pt;
         float: left;
@@ -45,6 +45,7 @@ body {
         border-radius: 10px;
         margin-bottom: 10px;
         text-align: left;
+        border-color: black
     }
 
 .container-2 {
@@ -62,12 +63,13 @@ body {
         text-align: left;
         width: 150px;
         height: 40px;
-        background: #72798c;
+        background: white;
         border: none;
         font-size: 10pt;
         padding-left: 45px;
         -webkit-border-radius: 5px;
         border-radius: 30px;
+        border-color:black;
     }
 input::placeholder {
     font-weight: bold;
@@ -111,11 +113,32 @@ th {
 
 nav {
     top:auto;
-    background-color: green;
+    background-color: lightslategrey;
     color: white;
     padding:10px;
 }
+a:link {
+    color: black;
+    background-color: transparent;
+    text-decoration: none;
+}
+a:visited {
+    color: black;
+    background-color: transparent;
+    text-decoration: none;
+}
 
+a:hover {
+    color: darkred;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+a:active {
+    color: black;
+    background-color: transparent;
+    text-decoration: underline;
+}
 /*dashboard style*/
 .form-container {
     display: flex;

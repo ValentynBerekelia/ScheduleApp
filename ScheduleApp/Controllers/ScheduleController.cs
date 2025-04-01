@@ -15,8 +15,8 @@ namespace ScheduleApp.Controllers
     //[ViewComponent]
     public class ScheduleController : Controller
     {
-        private readonly RootRepository _rootRepository;
-        public ScheduleController(RootRepository rootRepository)
+        private readonly ScheduleService _rootRepository;
+        public ScheduleController(ScheduleService rootRepository)
         {
             _rootRepository = rootRepository;
         }

@@ -13,7 +13,7 @@ builder.Services.AddTransient<JSONDeserializer>();
 // Add services to the container.
 builder.Services.AddHttpClient<JSONDeserializer>();
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<RootRepository>();
+builder.Services.AddScoped<ScheduleService>();
 
 builder.Services.AddSession();
 

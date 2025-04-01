@@ -13,11 +13,11 @@ using System.Linq.Expressions;
 using System.Security.Cryptography.Xml;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-public class RootRepository
+public class ScheduleService
 {
     private readonly ApplicationContext context;
 
-    public RootRepository(ApplicationContext context)
+    public ScheduleService(ApplicationContext context)
     {
         this.context = context;
     }
@@ -318,11 +318,19 @@ public class RootRepository
     {
         List<LessonInfo> list = new();
         List<LessonInfo> listSaturday = new();
-        //тимчасові дані
-        var d1 = "17/02/2025";
-        var d2 = "30/03/2025";
-        DateTime startSaturday = DateTime.Parse(d1);//ці дані потрібно буде звідкись брати
-        DateTime endSaturaday = DateTime.Parse(d2);
+        DateTime startSaturday = new();
+        DateTime endSaturaday = new();
+        foreach (var sat in context.SaturdayClasses)
+        {
+            startSaturday = sat.StartSaturday;
+            endSaturaday = sat.EndSaturday;
+
+        }
+        ////тимчасові дані
+        //var startSaturday = "17/02/2025";
+        //var endSaturaday = "30/03/2025";
+        //DateTime startSaturday = DateTime.Parse(startSaturday);//ці дані потрібно буде звідкись брати
+        //DateTime endSaturaday = DateTime.Parse(endSaturaday);
        //
 
 
@@ -361,12 +369,14 @@ public class RootRepository
     //Конкретна дата + група
     public List<LessonInfo> SearchByDate(string group,DateTime date)
     {
-        //тимчасові дані
-        var d1 = "17/02/2025";
-        var d2 = "30/03/2025";
-        DateTime startSaturday = DateTime.Parse(d1);//ці дані потрібно буде звідкись брати
-        DateTime endSaturaday = DateTime.Parse(d2);
-        //
+        DateTime startSaturday = new();
+        DateTime endSaturaday = new();
+        foreach (var sat in context.SaturdayClasses)
+        {
+            startSaturday = sat.StartSaturday;
+            endSaturaday = sat.EndSaturday;
+
+        }
 
         var Start = context.Roots.Select(r => r.Semester.StartDay).ToList();
         DateTime startSemester = DateTime.Parse(Start[0]);
