@@ -78,7 +78,7 @@ public class ScheduleService
     {
         List<LessonInfo> lesson = new();
         var Start = context.Roots.Select(r => r.Semester.StartDay).ToList();
-        DateTime startSemester = DateTime.Parse(Start[0]);
+        DateTime startSemester = DateTime.ParseExact(Start[0].ToString(), "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
         int num = OddsOfWeek(startSemester, DateTime.Today);
         //перевірка на парність/непарність тижня
         if (num % 2 == 0)
