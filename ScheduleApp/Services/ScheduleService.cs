@@ -326,13 +326,6 @@ public class ScheduleService
             endSaturaday = sat.EndSaturday;
 
         }
-        ////тимчасові дані
-        //var startSaturday = "17/02/2025";
-        //var endSaturaday = "30/03/2025";
-        //DateTime startSaturday = DateTime.Parse(startSaturday);//ці дані потрібно буде звідкись брати
-        //DateTime endSaturaday = DateTime.Parse(endSaturaday);
-       //
-
 
         DateTime today = DateTime.Today;//DateTime.Today()
 
