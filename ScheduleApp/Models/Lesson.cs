@@ -2,12 +2,12 @@
 {
     public class Lesson
     {
-        public int LessonId { get; set; }
-        public Teacher? Teacher { get; set; }
-        public string? LinkToMeeting { get; set; }
-        public string? SubjectForSite { get; set; }
-        public string? LessonType { get; set; }
-        public Room? Room { get; set; }
+        public int LessonId { get; set; } 
+        public Teacher? Teacher { get; set; } = null!;
+        public string? LinkToMeeting { get; set; } = null!;
+        public string? SubjectForSite { get; set; } = null!;
+        public string? LessonType { get; set; } = null!;
+        public Room? Room { get; set; } = null!;
 
         //public object? TemporarySchedule { get; set; }//тип object не підтримується
     }

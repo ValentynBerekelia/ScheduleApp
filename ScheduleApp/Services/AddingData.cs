@@ -14,12 +14,10 @@ namespace ScheduleApp.Services
                 {
                     context.Add(scheduleData);
                     context.SaveChanges();
-                    Console.WriteLine("Дані успішно додано");
                 }
             }
             else
             {
-                Console.WriteLine("Дані вже існують");
             }
         }
     }

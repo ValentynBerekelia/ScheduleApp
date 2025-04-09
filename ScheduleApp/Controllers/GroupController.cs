@@ -7,8 +7,8 @@ namespace ScheduleApp.Controllers
 {
     public class GroupController : Controller
     {
-        private readonly RootRepository _rootRepository;
-        public GroupController(RootRepository rootRepository)
+        private readonly ScheduleService _rootRepository;
+        public GroupController(ScheduleService rootRepository)
         {
             _rootRepository = rootRepository;
         }

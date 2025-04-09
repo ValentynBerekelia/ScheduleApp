@@ -7,12 +7,10 @@ namespace ScheduleApp.Services
 {
     public class ApplicationContext : DbContext
     {
-        //public DbSet<Root> Roots { get; set; } = null!;
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
              : base(options)
         {
-            //Database.EnsureDeleted();//del
             Database.EnsureCreated();//del
         }
         protected override void OnModelCreating(ModelBuilder builder)
@@ -36,5 +34,7 @@ namespace ScheduleApp.Services
         public DbSet<SemesterClass> SemesterClasses { get; set; } = null!;
         public DbSet<Teacher> Teachers { get; set; } = null!;
         public DbSet<Weeks> Weeks { get; set; } = null!;
+
+        public DbSet<SaturdayClass> SaturdayClasses { get; set; } = null!;
     }
 }
