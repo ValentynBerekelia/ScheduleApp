@@ -9,5 +9,6 @@ namespace ScheduleApp.Models
         public DateTime StartSaturday { get; set; }
         public DateTime EndSaturday { get; set; }
         public string WeekType { get; set; } = null!;
+        public string SecondWeekType { get; set; } = null!;
     }
 }

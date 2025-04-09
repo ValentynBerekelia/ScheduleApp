@@ -19,10 +19,11 @@ body {
     left: 0;
     width: 100%;
     min-height: 100vh;
-    background-image: url(../image/747506.jpg);
+    background-color:lightslategray;
+    /*background-image: url(../image/747506.jpg);
     background-repeat:no-repeat;
     background-size:cover;
-    z-index:-1;
+    z-index:-1;*/
     /*filter:blur(10px);*/
 }
 .content{
@@ -67,6 +68,7 @@ body {
         text-align: left;
         border-color: black
     }
+
 
 .container-2 {
     vertical-align: middle;

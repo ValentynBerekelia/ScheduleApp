@@ -30,6 +30,10 @@
         @Html.LabelFor(model => model.WeekType, "Week type")
         <br />
         @Html.EditorFor(model => model.WeekType)
+        <br/>
+        @Html.LabelFor(model => model.SecondWeekType, "SecondWeekType")
+        <br />
+        @Html.EditorFor(model => model.SecondWeekType)
         <br />
         <input type="submit" value="Добавить" />
         <br />
@@ -40,6 +44,11 @@
         <form method="post" asp-controller="Admin" asp-action="Delete">       
            <input type="submit" value="Delete" />
         </form>
+    </div>
+    <div>
+            <form method="post" asp-controller="Admin" asp-action="UppdateDatabase">
+                <input type="submit" value="Uppdate d" />
+            </form>
     </div>
     </div>
 </body>

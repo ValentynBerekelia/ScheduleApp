@@ -10,7 +10,6 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 builder.Services.AddTransient<JSONDeserializer>();
 
 
-// Add services to the container.
 builder.Services.AddHttpClient<JSONDeserializer>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ScheduleService>();
@@ -21,7 +20,7 @@ builder.Services.AddSession();
 var app = builder.Build();
 app.UseSession();
 
-// Configure the HTTP request pipeline.
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");

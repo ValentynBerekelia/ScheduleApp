@@ -28,7 +28,6 @@ namespace ScheduleApp.Controllers
 
         //Зробити підсвітку конкретного дня/можливо конкретної пари
         [HttpGet]
-        //розклад має виводитись на головній сторінці,а не переходити на інші
         public IActionResult GetTeacher(string surname,string group,DateTime date)
         {
             if (group != null && surname == null && date.Year < 2000)
@@ -46,13 +45,7 @@ namespace ScheduleApp.Controllers
                 var result = _rootRepository.SearchByDate(group, date);
                 return View("GetTeacher", result);
             }
-            return View("Error");//замінити сторінкою із розкладом на теперішній тиждень для всіх груп
+            return View("Error");
         }
     }
-    //Написати ф-цію
-    //Користувач вводить групу + дату => йому виводить розклад на конкретний день +
-    //*враховує навчання по суботам
-    //* враховує вихідний день(неділя , деколи субота)
-    //*парність тижня
-    //required minlength="4" maxlength="8" size="10"
 }

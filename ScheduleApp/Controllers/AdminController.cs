@@ -8,10 +8,12 @@ namespace ScheduleApp.Controllers
     public class AdminController : Controller
     {
         private readonly ApplicationContext context;
-
-        public AdminController(ApplicationContext context)
+        private readonly JSONDeserializer scheduleService;
+        public AdminController(ApplicationContext context, JSONDeserializer scheduleService)
         {
+
             this.context = context;
+            this.scheduleService = scheduleService;
         }
         private const string AdminPassword = "1634532h";
 
@@ -57,6 +59,30 @@ namespace ScheduleApp.Controllers
             }
             return RedirectToAction("Dashboard");
         }
-  
+        public IActionResult UppdateDatabase()
+        {
+            context.Schedules.RemoveRange(context.Schedules);
+            context.ClassItems.RemoveRange(context.ClassItems);
+            context.Lessons.RemoveRange(context.Lessons);
+            context.SemesterClasses.RemoveRange(context.SemesterClasses);
+            context.Days.RemoveRange(context.Days);
+            context.Weeks.RemoveRange(context.Weeks);
+            context.Groups.RemoveRange(context.Groups);
+            context.Rooms.RemoveRange(context.Rooms);
+            context.Departments.RemoveRange(context.Departments);
+            context.Semesters.RemoveRange(context.Semesters);
+            context.Teachers.RemoveRange(context.Teachers);
+            context.Roots.RemoveRange(context.Roots);
+
+            context.SaveChanges();
+            var scheduleData = scheduleService.GetScheduleData().Result;
+            if (scheduleData != null)
+            {
+            context.Add(scheduleData);
+            context.SaveChanges();
+            }
+            return RedirectToAction("Dashboard");
+        }
+
     }
 }
