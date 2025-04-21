@@ -26,14 +26,13 @@ namespace ScheduleApp.Controllers
             return View(list);
         }
 
-        //Зробити підсвітку конкретного дня/можливо конкретної пари
         [HttpGet]
         public IActionResult GetTeacher(string surname,string group,DateTime date)
         {
             if (group != null && surname == null && date.Year < 2000)
             {
-                var result = _rootRepository.Group(group);
-                return RedirectToAction("getGroup", "Group", new { group });
+                var result = _rootRepository.SearchByGroup(group);
+                return View("GetTeacher", result);
             }
             else if(group == null && surname != null && date.Year < 2000)
             {
@@ -45,7 +44,12 @@ namespace ScheduleApp.Controllers
                 var result = _rootRepository.SearchByDate(group, date);
                 return View("GetTeacher", result);
             }
-            return View("Error");
+            else if(surname != null && date.Year >= 2025)
+            {
+                var result = _rootRepository.TeacherAndDate(surname, date);
+                return View("GetTeacher", result);
+            }
+                return View("Error");
         }
     }
 }

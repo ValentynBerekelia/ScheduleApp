@@ -2,6 +2,7 @@ using ScheduleApp.Services;
 using ScheduleApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyModel;
+using ScheduleApp.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 

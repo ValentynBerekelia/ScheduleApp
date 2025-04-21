@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ScheduleApp.Services;
+using ScheduleApp.Data;
+
 
 #nullable disable
 
@@ -92,7 +93,7 @@ namespace ScheduleApp.Migrations
                     b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("ScheduleApp.Models.Group", b =>
+            modelBuilder.Entity("ScheduleApp.Models.SearchByGroup", b =>
                 {
                     b.Property<int>("GroupId")
                         .ValueGeneratedOnAdd()
@@ -352,11 +353,11 @@ namespace ScheduleApp.Migrations
                         .HasForeignKey("ScheduleItemId");
                 });
 
-            modelBuilder.Entity("ScheduleApp.Models.Group", b =>
+            modelBuilder.Entity("ScheduleApp.Models.SearchByGroup", b =>
                 {
                     b.HasOne("ScheduleApp.Models.ScheduleItem", "ScheduleItem")
-                        .WithOne("Group")
-                        .HasForeignKey("ScheduleApp.Models.Group", "ScheduleItemId");
+                        .WithOne("SearchByGroup")
+                        .HasForeignKey("ScheduleApp.Models.SearchByGroup", "ScheduleItemId");
 
                     b.Navigation("ScheduleItem");
                 });
@@ -441,7 +442,7 @@ namespace ScheduleApp.Migrations
                 {
                     b.Navigation("Days");
 
-                    b.Navigation("Group");
+                    b.Navigation("SearchByGroup");
                 });
 
             modelBuilder.Entity("ScheduleApp.Models.Semester", b =>

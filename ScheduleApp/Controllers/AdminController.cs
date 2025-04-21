@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ScheduleApp.Data;
 using ScheduleApp.Models;
-using ScheduleApp.Services;
 using System.Linq;
 
 namespace ScheduleApp.Controllers

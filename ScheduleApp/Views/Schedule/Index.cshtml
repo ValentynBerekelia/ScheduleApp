@@ -20,33 +20,56 @@ ViewData["Title"] = "Home Page";
     <div class="background">
         <div class="content">
     <div class="box">
-    <form asp-action="GetTeacher" method="get">   
+                <form asp-action="GetTeacher" method="get">
+                    <div class="container-1">
+                        <input placeholder="Enter teacher" list="List" type="text" name="Surname" id="teacherInput" />
+                        <datalist id="List">
+                            @foreach (var item in Model)
+                            {
+                                if (item.TeacherSurname != "")
+                                {
+                                    <option value="@item.TeacherSurname @item.TeacherName @item.TeacherPatronymic"></option>
+                                }
+                            }
+                        </datalist>
 
-            <div class="container-1">
-            <input placeholder="Enter teacher" list="List" type="text" name="Surname"/>     
-            <datalist id="List">
-                @foreach(var item in Model)
-                {
-                    if (item.TeacherSurname != "")
-                    {
-                        <option id="" value="@item.TeacherSurname @item.TeacherName @item.TeacherPatronymic"></option>
+                        <input placeholder="Enter group" list="list" type="text" name="Group" id="groupInput" />
+                        <datalist id="list">
+                            @foreach (var item in Model)
+                            {
+                                <option value="@item.GroupName"></option>
+                            }
+                        </datalist>
+
+                        <input type="date" name="Date" />
+                    </div>
+
+                    <div class="container-2">
+                        <input type="submit" value="Відправити" />
+                    </div>
+                </form>
+
+                <script>
+                    const teacherInput = document.getElementById('teacherInput');
+                    const groupInput = document.getElementById('groupInput');
+
+                    function updateInputs() {
+                        if (teacherInput.value.trim() !== "") {
+                            groupInput.disabled = true;
+                        } else {
+                            groupInput.disabled = false;
+                        }
+
+                        if (groupInput.value.trim() !== "") {
+                            teacherInput.disabled = true;
+                        } else {
+                            teacherInput.disabled = false;
+                        }
                     }
-                }
-            </datalist>
 
-                <input placeholder="Enter group" list="list" type="text" name="Group" />
-            <datalist id="list">
-                @foreach (var item in Model)
-                {
-                    <option id="" value="@item.GroupName"></option>
-                }
-            </datalist>
-            <input type="date" name="Date" />
-            </div>
-            <div class="container-2">
-            <input type="submit" value="Відправити" />
-            </div>
-    </form>
+                    teacherInput.addEventListener('input', updateInputs);
+                    groupInput.addEventListener('input', updateInputs);
+                </script>
     </div>
     </div>
     </div>

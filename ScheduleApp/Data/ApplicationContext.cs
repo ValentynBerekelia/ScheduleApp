@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ScheduleApp.Models;
-using ScheduleApp.Services;
 using SQLitePCL;
 using System.ComponentModel.Design;
-namespace ScheduleApp.Services
+namespace ScheduleApp.Data
 {
     public class ApplicationContext : DbContext
     {

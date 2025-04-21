@@ -1,4 +1,5 @@
-﻿using ScheduleApp.Models;
+﻿using ScheduleApp.Data;
+using ScheduleApp.Models;
 
 namespace ScheduleApp.Services
 {
