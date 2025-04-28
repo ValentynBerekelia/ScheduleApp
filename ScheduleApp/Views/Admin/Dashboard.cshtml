@@ -24,13 +24,13 @@
             border-radius: 10px;
         }
 
-            .form-1 select, .form-1 input[type=date], .form-1 input[type=text], .form-1 input[type=submit] {
+            .form-1 select, .form-1 input, .form-1 input[type=text], .form-1 input[type=submit] {
                 padding: 6px 10px;
                 border: 1px solid #ccc;
                 border-radius: 4px;
             }
 
-            .form-2 select, .form-2 input[type=date], .form-2 input[type=text], .form-2 input[type=submit] {
+            .form-2 select,.form-2 input[type=text], .form-2 input[type=submit] {
                 padding: 6px 10px;
                 border: 1px solid #ccc;
                 border-radius: 4px;
@@ -74,7 +74,7 @@
         </div>
     <div class="form-2">
         <form method="post" asp-controller="Admin" asp-action="Delete">       
-           <input type="submit" value="Delete" />
+           <input type="submit" value="Delete saturday" />
         </form>
             <form method="post" asp-controller="Admin" asp-action="UppdateDatabase">
                 <input type="submit" value="Uppdate database" />
