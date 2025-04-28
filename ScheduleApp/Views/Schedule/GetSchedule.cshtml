@@ -1,0 +1,167 @@
+﻿@model ViewModel
+@{
+    ViewData["Title"] = "Schedule";
+}
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Schedule</title>
+    <style>
+        .container {
+        padding: 20px;
+        }
+        .header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        }
+        .header-title {
+        display: flex;
+        align-items: center;
+        }
+        .icon {
+        width: 48px;
+        height: 48px;
+        background-color: #bfdbfe;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 10px;
+        }
+        .filters {
+        display: flex;
+        gap: 10px;
+        }
+        .filters select, .filters input[type=date], .filters input[type=text], .filters input[type=submit] {
+        padding: 6px 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        }
+        .settings-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        }
+        table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        }
+        th, td {
+        border: 1px solid #d1d5db;
+        padding: 8px;
+        text-align: center;
+        vertical-align: top;
+        }
+        th {
+        background-color: #f3f4f6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-bar">
+            <div class="header-title">
+                <div class="icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                </div>
+                <span class="text-lg font-bold">Розклад ФМІ</span>
+            </div>
+            <div class="filters">
+                <form asp-action="GetSchedule" method="get">
+                    <input placeholder="Введіть викладача" list="List" type="text" name="Surname" id="teacherInput" />
+                    <datalist id="List">
+                        @foreach (var item in Model.TeacherInfos)
+                        {
+                            <option value="@item.TeacherSurname @item.TeacherName @item.TeacherPatronymic"></option>
+                        }
+                    </datalist>
+
+                    <input placeholder="Введіть групу" list="list" type="text" name="Group" id="groupInput" />
+                    <datalist id="list">
+                        @foreach (var item in Model.TeacherInfos)
+                        {
+                            <option value="@item.GroupTitle"></option>
+                        }
+                    </datalist>
+
+                    <input type="date" name="Date"/>
+                    <input type="submit" />
+                </form>
+                <script>
+                    const teacherInput = document.getElementById('teacherInput');
+                    const groupInput = document.getElementById('groupInput');
+
+                    function updateInputs() {
+                        if (teacherInput.value.trim() !== "") {
+                            groupInput.disabled = true;
+                        } else {
+                            groupInput.disabled = false;
+                        }
+
+                        if (groupInput.value.trim() !== "") {
+                            teacherInput.disabled = true;
+                        } else {
+                            teacherInput.disabled = false;
+                        }
+                    }
+
+                    teacherInput.addEventListener('input', updateInputs);
+                    groupInput.addEventListener('input', updateInputs);
+                </script>
+            </div>
+
+            <div class="settings-icon">
+            </div>
+        </div>
+        <h3>@Model.LesoInfos[0].WeekType Week</h3>
+        <table style="width:90%;margin: 0 auto;font-size:12px;">
+            <thead>
+                <tr>
+                    <th>Час</th>
+                    <th>Понеділок</th>
+                    <th>Вівторок</th>
+                    <th>Середа</th>
+                    <th>Четвер</th>
+                    <th>П'ятниця</th>
+                    <th>Субота</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    string[] timeSlots = { "08:20 - 09:40", "09:50 - 11:10", "11:30 - 12:50", "13:00 - 14:20", "14:40 - 16:00", "16:10 - 17:30" };
+                }
+                @foreach (var time in timeSlots)
+                {
+                    <tr>
+                        <td style="width:90px;">@time</td>
+                        @for (int i = 1; i <= 6; i++)
+                        {
+                            var lesson = Model.LesoInfos.FirstOrDefault(d => d.Day == ((DayOfWeek)i).ToString().ToUpper() && d.StartTime == time.Split(" - ")[0]);
+                            <td>
+                                @if (lesson != null)
+                                {
+                                    <div>@lesson.Subject</div>
+                                    <div>@lesson.LessonType</div>
+                                    <div>@lesson.RoomName</div>
+                                    <div>@lesson.TeacherSurname @lesson.TeacherName @lesson.TeacherPatronymic</div>
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

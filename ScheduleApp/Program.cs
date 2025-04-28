@@ -46,7 +46,7 @@ app.MapControllerRoute(
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Schedule}/{action=Index}/{id?}");
+    pattern: "{controller=Schedule}/{action=GetSchedule}/{id?}");
 
 using (var scope = app.Services.CreateScope())
 {

@@ -5,14 +5,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="~/css/site.css"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <style>
+        .form-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: absolute;
+            top: 10%;
+            width: 100%;
+        }
+
+        .form-1, .form-2 {
+            background-color: powderblue;
+            width: 15%;
+            border-radius: 10px;
+        }
+
+            .form-1 select, .form-1 input[type=date], .form-1 input[type=text], .form-1 input[type=submit] {
+                padding: 6px 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            .form-2 select, .form-2 input[type=date], .form-2 input[type=text], .form-2 input[type=submit] {
+                padding: 6px 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+        .saturday {
+            border-radius: 10px;
+        }
+
+    </style>
 </head>
 <body>
     <nav>
-        <a class="navbar-brand" asp-area="" asp-controller="Schedule" asp-action="index">Home</a>
+        <a class="navbar-brand" asp-area="" asp-controller="Schedule" asp-action="GetSchedule">Home</a>
     </nav>
     <div class="form-container">
         <div class="form-1">
@@ -27,15 +59,15 @@
         <br />
         @Html.EditorFor(model => model.EndSaturday)
         <br />
-        @Html.LabelFor(model => model.WeekType, "Week type")
+        @Html.LabelFor(model => model.WeekType, "First week type")
         <br />
         @Html.EditorFor(model => model.WeekType)
         <br/>
-        @Html.LabelFor(model => model.SecondWeekType, "SecondWeekType")
+        @Html.LabelFor(model => model.SecondWeekType, "Second week type")
         <br />
         @Html.EditorFor(model => model.SecondWeekType)
         <br />
-        <input type="submit" value="Добавить" />
+        <input type="submit" value="Add" />
         <br />
     }
     </form>
@@ -44,12 +76,10 @@
         <form method="post" asp-controller="Admin" asp-action="Delete">       
            <input type="submit" value="Delete" />
         </form>
-    </div>
-    <div>
             <form method="post" asp-controller="Admin" asp-action="UppdateDatabase">
-                <input type="submit" value="Uppdate d" />
+                <input type="submit" value="Uppdate database" />
             </form>
     </div>
-    </div>
+</div>
 </body>
 </html>

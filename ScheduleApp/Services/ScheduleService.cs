@@ -27,7 +27,7 @@ public class ScheduleService
     }
 
     public List<TeacherInfo> TeacherList()
-    {
+    {     
         var teachers = context.Roots
             .SelectMany(r => r.Schedule)
             .SelectMany(s => s.Days)
@@ -46,7 +46,7 @@ public class ScheduleService
             .Where(r => r.Group != null)
             .Select(s => new TeacherInfo
             {
-                GroupName = s.Group.Title
+                GroupTitle = s.Group.Title
             })
             .Distinct()
             .ToList();
@@ -64,8 +64,8 @@ public class ScheduleService
                       from schedule in root.Schedule
                       from day in schedule.Days
                       from classItem in day.Classes
-                      let teacher = classItem.Weeks.Even.Teacher
-                      where teacher.Surname + " " + teacher.Name + " " + teacher.Patronymic == surname
+                          let teacher = isEven ? classItem.Weeks.Even.Teacher : classItem.Weeks.Odd.Teacher
+                          where teacher.Surname + " " + teacher.Name + " " + teacher.Patronymic == surname
                       let week = isEven ? classItem.Weeks.Even : classItem.Weeks.Odd
                       group new { schedule, day, classItem } by new
                       {
@@ -304,8 +304,8 @@ public class ScheduleService
                   from day in schedule.Days
                   where day.day == date.DayOfWeek.ToString().ToUpper()
                   from classItem in day.Classes
-                  let teacher = classItem.Weeks.Even.Teacher
-                  where day.day == date.DayOfWeek.ToString().ToUpper()
+                  let teacher = isEven ? classItem.Weeks.Even.Teacher : classItem.Weeks.Odd.Teacher
+                      where day.day == date.DayOfWeek.ToString().ToUpper()
                   where teacher.Surname + " " + teacher.Name + " " + teacher.Patronymic == surname
                   let week = isEven ? classItem.Weeks.Even : classItem.Weeks.Odd
                   group new { schedule, day, classItem } by new
@@ -335,6 +335,8 @@ public class ScheduleService
                       LessonType = g.Key.LessonType,
                       RoomName = g.Key.RoomName
                   }).OrderBy(s => s.StartTime).ToList();
+        if (lesson.FirstOrDefault() == null)
+            return new List<LessonInfo> { new LessonInfo { Day = "" } };
         return lesson;
     }
     public List<LessonInfo> SaturdayTeacher(string surname, DateTime startSemester, DateTime today)
