@@ -3,13 +3,18 @@ using ScheduleApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyModel;
 using ScheduleApp.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddDbContext<ApplicationContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddTransient<JSONDeserializer>();
-
 
 builder.Services.AddHttpClient<JSONDeserializer>();
 builder.Services.AddControllersWithViews();
@@ -20,7 +25,6 @@ builder.Services.AddSession();
 
 var app = builder.Build();
 app.UseSession();
-
 
 if (!app.Environment.IsDevelopment())
 {

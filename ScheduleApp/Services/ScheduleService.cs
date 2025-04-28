@@ -366,8 +366,6 @@ public class ScheduleService
 
         int totalDays = (today - saturdayRange.StartSaturday).Days;
         int totalWeek = totalDays / 7;
-        //якщо більше 7 то second
-        //проблема з днями(reverse view)
         bool weekType = totalWeek <= 5;// ? FirstWeek : SecondWeek;
         string dayName = ((DayOfWeek)count).ToString().ToUpper();
         string currentWeekType = weekType ? FirstWeek : SecondWeek;
@@ -392,7 +390,8 @@ public class ScheduleService
                           LessonType = week.LessonType,
                           RoomName = week.Room.Name
                       }).OrderBy(x => x.StartTime).ToList();
-
+        if (lesson.FirstOrDefault() == null)
+            return new List<LessonInfo> { new LessonInfo { Day = "" } };
         return lesson;
     }
 }
