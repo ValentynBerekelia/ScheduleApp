@@ -84,7 +84,10 @@
                     <datalist id="List">
                         @foreach (var item in Model.TeacherInfos)
                         {
-                            <option value="@item.TeacherSurname @item.TeacherName @item.TeacherPatronymic"></option>
+                            @if (item.TeacherSurname != "" && item.TeacherPatronymic != "" && item.TeacherName != "")
+                            {
+                                <option value="@item.TeacherSurname @item.TeacherName @item.TeacherPatronymic"></option>
+                            }
                         }
                     </datalist>
 
@@ -92,7 +95,10 @@
                     <datalist id="list">
                         @foreach (var item in Model.TeacherInfos)
                         {
-                            <option value="@item.GroupTitle"></option>
+                            if (item.GroupTitle != "")
+                            {
+                                <option value="@item.GroupTitle"></option>
+                            }
                         }
                     </datalist>
 
@@ -127,14 +133,13 @@
         </div>
         <h3>@Model.LesoInfos[0].WeekType Week</h3>
         <div class="schedule">
-            <div class="header">Time</div>
-            <div class="header">Monday</div>
-            <div class="header">Tuesday</div>
-            <div class="header">Wednesday</div>
-            <div class="header">Thursday</div>
-            <div class="header">Friday</div>
-            <div class="header">Saturday</div>
-
+            <div class="header">Час</div>
+            <div class="header">Понеділок</div>
+            <div class="header">Вівторок</div>
+            <div class="header">Середа</div>
+            <div class="header">Четвер</div>
+            <div class="header">П'ятниця</div>
+            <div class="header">Субота</div>
             @{
                 string[] timeSlots = { "08:20 - 09:40", "09:50 - 11:10", "11:30 - 12:50", "13:00 - 14:20", "14:40 - 16:00", "16:10 - 17:30" };
             }

@@ -61,15 +61,37 @@
         <br />
         @Html.LabelFor(model => model.WeekType, "First week type")
         <br />
-        @Html.EditorFor(model => model.WeekType)
-        <br/>
+        @Html.DropDownListFor(model => model.WeekType,
+        new SelectList(new[] { "Even", "Odd" }),
+        new { id = "WeekType", @class = "form-control" })
+        <br />
         @Html.LabelFor(model => model.SecondWeekType, "Second week type")
         <br />
-        @Html.EditorFor(model => model.SecondWeekType)
+        @Html.DropDownListFor(model => model.SecondWeekType,
+        new SelectList(new[] { "Even", "Odd" }),
+        new { id = "SecondWeekType", @class = "form-control" })
         <br />
         <input type="submit" value="Add" />
         <br />
     }
+        <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const weekType = document.getElementById("WeekType");
+                        const secondWeekType = document.getElementById("SecondWeekType");
+
+                        weekType.addEventListener("change", function () {
+                            const value = weekType.value;
+
+                            if (value === "Even") {
+                                secondWeekType.value = "Odd";
+                            } else if (value === "Odd") {
+                                secondWeekType.value = "Even";
+                            } else {
+                                secondWeekType.value = "";
+                            }
+                        });
+                    });
+        </script>
     </form>
         </div>
     <div class="form-2">

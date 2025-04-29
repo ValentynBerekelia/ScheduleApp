@@ -57,15 +57,37 @@ public class ScheduleService
 
     //ScheduleController
     public List<LessonInfo> SearchForTeacher(string surname) 
-    { 
+    {
+        DateTime date = DateTime.Today;
+        var saturdayRange = context.SaturdayClasses.FirstOrDefault();
+        if (saturdayRange == null)
+        {
+            return new List<LessonInfo> { new LessonInfo { Day = "" } };
+        }
+        DateTime? startSaturday = null;
+        DateTime? endSaturday = null;
+        if (saturdayRange != null)
+        {
+            startSaturday = saturdayRange.StartSaturday;
+            endSaturday = saturdayRange.EndSaturday;
+        }
         DateTime startSemester = DateTime.ParseExact(context.Roots.Select(r => r.Semester.StartDay).First(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
-        bool isEven = OddsOfWeek(startSemester, DateTime.Today) % 2 == 0;
-            var lesson = (from root in context.Roots
+        if ((date.DayOfWeek == DayOfWeek.Saturday && (date.DayOfYear >= endSaturday.Value.DayOfYear || date.DayOfYear <= startSaturday.Value.DayOfYear)) || date.DayOfWeek == DayOfWeek.Sunday)
+        {
+            return new List<LessonInfo> { new LessonInfo { Day = "" } };
+        }
+        if (DateTime.Today >= startSaturday && DateTime.Today <= endSaturday)
+        {
+            return SaturdayTeacher(surname, startSaturday.Value, date);//потрібно іншу ф-цію,яка буде враховувати тиждень
+        }
+        bool isEven = OddsOfWeek(startSemester, date) % 2 == 0;
+
+        var lesson = (from root in context.Roots
                       from schedule in root.Schedule
                       from day in schedule.Days
                       from classItem in day.Classes
-                          let teacher = isEven ? classItem.Weeks.Even.Teacher : classItem.Weeks.Odd.Teacher
-                          where teacher.Surname + " " + teacher.Name + " " + teacher.Patronymic == surname
+                      let teacher = isEven ? classItem.Weeks.Even.Teacher : classItem.Weeks.Odd.Teacher
+                      where teacher.Surname + " " + teacher.Name + " " + teacher.Patronymic == surname
                       let week = isEven ? classItem.Weeks.Even : classItem.Weeks.Odd
                       group new { schedule, day, classItem } by new
                       {
@@ -94,6 +116,8 @@ public class ScheduleService
                           LessonType = g.Key.LessonType,
                           RoomName = g.Key.RoomName
                       }).OrderBy(s => s.StartTime).ToList();
+        if (lesson.FirstOrDefault() == null)
+            return new List<LessonInfo> { new LessonInfo { Day = "" } };
         return lesson;
     }
 
@@ -217,15 +241,21 @@ public class ScheduleService
         List<LessonInfo> list = new List<LessonInfo>();
         List<LessonInfo> listSaturday = new List<LessonInfo>();
         var saturdayRange = context.SaturdayClasses.FirstOrDefault();
-        DateTime startSaturday = saturdayRange.StartSaturday;
-        DateTime endSaturday = saturdayRange.EndSaturday;
+
+        DateTime? startSaturday = null;
+        DateTime? endSaturday = null;
+        if (saturdayRange != null)
+        {
+            startSaturday = saturdayRange.StartSaturday;
+            endSaturday = saturdayRange.EndSaturday;
+        }
         DateTime startSemester = DateTime.ParseExact(context.Roots.Select(r => r.Semester.StartDay).First(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
         bool isEven = OddsOfWeek(startSemester, DateTime.Today) % 2 == 0;
         list = WeekScheduleOutput(group, isEven);
         if (DateTime.Today >= startSaturday && DateTime.Today <= endSaturday)
         {
-            listSaturday = SaturdayOutput(group, startSaturday, DateTime.Today);
+            listSaturday = SaturdayOutput(group, startSaturday.Value, DateTime.Today);
         }
         list.AddRange(listSaturday);
         return list;
@@ -239,16 +269,22 @@ public class ScheduleService
         {
             return new List<LessonInfo> { new LessonInfo { Day = "" } };
         }
-        DateTime startSaturday = saturdayRange.StartSaturday;
-        DateTime endSaturday = saturdayRange.EndSaturday;
+        DateTime? startSaturday = null;
+        DateTime? endSaturday = null;
+        if (saturdayRange != null)
+        {
+            startSaturday = saturdayRange.StartSaturday;
+            endSaturday = saturdayRange.EndSaturday;
+        }
         DateTime startSemester = DateTime.ParseExact(context.Roots.Select(r => r.Semester.StartDay).First(),"dd/MM/yyyy",CultureInfo.InvariantCulture);
-        if ((date.DayOfWeek == DayOfWeek.Saturday && (date.DayOfYear >= endSaturday.DayOfYear || date.DayOfYear <= startSaturday.DayOfYear))|| date.DayOfWeek == DayOfWeek.Sunday)
+        if ((date.DayOfWeek == DayOfWeek.Saturday && (date.DayOfYear >= endSaturday.Value.DayOfYear || date.DayOfYear <= startSaturday.Value.DayOfYear))|| date.DayOfWeek == DayOfWeek.Sunday)
         {
             return new List<LessonInfo> { new LessonInfo { Day = "" } };
         }
-        if (date.DayOfWeek == DayOfWeek.Saturday)
+
+        if (date.DayOfWeek == DayOfWeek.Saturday && startSaturday != null)
         {
-            return SaturdayOutput(group,startSaturday,date);
+            return SaturdayOutput(group,startSaturday.Value,date);
         }
         bool isEven = OddsOfWeek(startSemester, date) % 2 == 0;
         var lesson = (from root in context.Roots
@@ -286,16 +322,21 @@ public class ScheduleService
         {
             return new List<LessonInfo> { new LessonInfo { Day = "" } };
         }
-        DateTime startSaturday = saturdayRange.StartSaturday;
-        DateTime endSaturday = saturdayRange.EndSaturday;
+        DateTime? startSaturday = null;
+        DateTime? endSaturday = null;
+        if (saturdayRange != null)
+        {
+            startSaturday = saturdayRange.StartSaturday;
+            endSaturday = saturdayRange.EndSaturday;
+        }
         DateTime startSemester = DateTime.ParseExact(context.Roots.Select(r => r.Semester.StartDay).First(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
-        if ((date.DayOfWeek == DayOfWeek.Saturday && (date.DayOfYear >= endSaturday.DayOfYear || date.DayOfYear <= startSaturday.DayOfYear)) || date.DayOfWeek == DayOfWeek.Sunday)
+        if ((date.DayOfWeek == DayOfWeek.Saturday && (date.DayOfYear >= endSaturday.Value.DayOfYear || date.DayOfYear <= startSaturday.Value.DayOfYear)) || date.DayOfWeek == DayOfWeek.Sunday)
         {
             return new List<LessonInfo> { new LessonInfo { Day = "" } };
         }
-        if (date.DayOfWeek == DayOfWeek.Saturday)
+        if (date.DayOfWeek == DayOfWeek.Saturday && startSaturday != null)
         {
-            return SaturdayTeacher(surname, startSaturday, date);
+            return SaturdayTeacher(surname, startSaturday.Value, date);
         }
         bool isEven = OddsOfWeek(startSemester, date) % 2 == 0;
 
