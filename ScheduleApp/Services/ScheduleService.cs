@@ -58,6 +58,7 @@ public class ScheduleService
     //ScheduleController
     public List<LessonInfo> SearchForTeacher(string surname) 
     {
+        List<LessonInfo> listSaturday = new List<LessonInfo>();
         DateTime date = DateTime.Today;
         var saturdayRange = context.SaturdayClasses.FirstOrDefault();
         if (saturdayRange == null)
@@ -76,9 +77,11 @@ public class ScheduleService
         {
             return new List<LessonInfo> { new LessonInfo { Day = "" } };
         }
+
+
         if (DateTime.Today >= startSaturday && DateTime.Today <= endSaturday)
         {
-            return SaturdayTeacher(surname, startSaturday.Value, date);//потрібно іншу ф-цію,яка буде враховувати тиждень
+            listSaturday = SaturdayTeacher(surname, startSaturday.Value, date);//потрібно іншу ф-цію,яка буде враховувати тиждень
         }
         bool isEven = OddsOfWeek(startSemester, date) % 2 == 0;
 
@@ -118,23 +121,9 @@ public class ScheduleService
                       }).OrderBy(s => s.StartTime).ToList();
         if (lesson.FirstOrDefault() == null)
             return new List<LessonInfo> { new LessonInfo { Day = "" } };
+        lesson.AddRange(listSaturday);
         return lesson;
     }
-
-    //public static int WeekСheсker(DateTime Start, DateTime Today)
-    //{
-    //    int count = 0;//1!
-    //    double var2 = Today.DayOfYear - Start.DayOfYear;
-    //    for (int i = 0; i < var2; i++)
-    //    {
-    //        DateTime timeNext = Start.AddDays(i);
-    //        if (timeNext.DayOfWeek == DayOfWeek.Sunday)
-    //        {
-    //            count += 1;
-    //        }
-    //    }
-    //    return count;
-    //}
     public static int OddsOfWeek(DateTime Start, DateTime Today)
     {
         int count = 1;//0!
@@ -172,6 +161,8 @@ public class ScheduleService
                               LessonType = week.LessonType,
                               RoomName = week.Room.Name
                           }).OrderBy(s => s.StartTime).ToList();
+        if (listResult.FirstOrDefault() == null)
+            return new List<LessonInfo> { new LessonInfo { Day = "" } };
         return listResult;
     }
 
@@ -258,6 +249,8 @@ public class ScheduleService
             listSaturday = SaturdayOutput(group, startSaturday.Value, DateTime.Today);
         }
         list.AddRange(listSaturday);
+        if (list.FirstOrDefault() == null)
+            return new List<LessonInfo> { new LessonInfo { Day = "" } };
         return list;
     }
 

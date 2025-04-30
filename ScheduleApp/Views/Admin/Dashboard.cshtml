@@ -53,8 +53,8 @@
     {
         @Html.LabelFor(model => model.StartSaturday, "Start saturday")
         <br />
-        @Html.EditorFor(model => model.StartSaturday)
-        <br />
+        @Html.LabelFor(model => model.StartSaturday)
+        <br/>
         @Html.LabelFor(model => model.EndSaturday, "End saturday")
         <br />
         @Html.EditorFor(model => model.EndSaturday)
@@ -68,7 +68,7 @@
         @Html.LabelFor(model => model.SecondWeekType, "Second week type")
         <br />
         @Html.DropDownListFor(model => model.SecondWeekType,
-        new SelectList(new[] { "Even", "Odd" }),
+        new SelectList(new[] { "Odd", "Even" }),
         new { id = "SecondWeekType", @class = "form-control" })
         <br />
         <input type="submit" value="Add" />

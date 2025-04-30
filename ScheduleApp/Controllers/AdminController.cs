@@ -43,9 +43,9 @@ namespace ScheduleApp.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult AddData(SaturdayClass saturdayclass)
+        public IActionResult AddData(SaturdayClass saturdaylass)
         {
-            context.SaturdayClasses.Add(saturdayclass);
+            context.SaturdayClasses.Add(saturdaylass);
             context.SaveChanges();
             return RedirectToAction("Dashboard");
         }

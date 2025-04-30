@@ -42,6 +42,9 @@
         padding: 6px 10px;
         border: 1px solid #ccc;
         border-radius: 4px;
+        font-size:14px;
+        height:36px;
+        box-sizing:border-box;
         }
         .settings-icon {
         width: 32px;
@@ -79,7 +82,7 @@
                 <span class="text-lg font-bold">Розклад ФМІ</span>
             </div>
             <div class="filters">
-                <form asp-action="GetSchedule" method="get">
+                <form style="display:flex;gap:10px" asp-action="GetSchedule" method="get">
                     <input placeholder="Введіть викладача" list="List" type="text" name="Surname" id="teacherInput" />
                     <datalist id="List">
                         @foreach (var item in Model.TeacherInfos)
