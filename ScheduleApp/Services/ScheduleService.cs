@@ -61,10 +61,8 @@ public class ScheduleService
         List<LessonInfo> listSaturday = new List<LessonInfo>();
         DateTime date = DateTime.Today;
         var saturdayRange = context.SaturdayClasses.FirstOrDefault();
-        if (saturdayRange == null)
-        {
-            return new List<LessonInfo> { new LessonInfo { Day = "" } };
-        }
+
+
         DateTime? startSaturday = null;
         DateTime? endSaturday = null;
         if (saturdayRange != null)
