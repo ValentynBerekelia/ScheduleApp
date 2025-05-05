@@ -75,13 +75,13 @@ public class ScheduleService
         DateTime startSemester = DateTime.ParseExact(context.Roots.Select(r => r.Semester.StartDay).First(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
         if ((date.DayOfWeek == DayOfWeek.Saturday && (date.DayOfYear >= endSaturday.Value.DayOfYear || date.DayOfYear <= startSaturday.Value.DayOfYear)) || date.DayOfWeek == DayOfWeek.Sunday)
         {
-            return new List<LessonInfo> { new LessonInfo { Day = "" } };
+            new List<LessonInfo> { new LessonInfo { Day = "" } };
         }
 
 
         if (DateTime.Today >= startSaturday && DateTime.Today <= endSaturday)
         {
-            listSaturday = SaturdayTeacher(surname, startSaturday.Value, date);//потрібно іншу ф-цію,яка буде враховувати тиждень
+            listSaturday = SaturdayTeacher(surname, startSaturday.Value, date);
         }
         bool isEven = OddsOfWeek(startSemester, date) % 2 == 0;
 
@@ -126,7 +126,7 @@ public class ScheduleService
     }
     public static int OddsOfWeek(DateTime Start, DateTime Today)
     {
-        int count = 1;//0!
+        int count = 1;
         double var2 = Today.DayOfYear - Start.DayOfYear;
         for (int i = 0; i < var2; i++)
         {
@@ -167,7 +167,6 @@ public class ScheduleService
     }
 
 
-    //змінити
     public List<LessonInfo> SaturdayOutput(string group, DateTime startSemester, DateTime today)
     {
         int count = 1;
