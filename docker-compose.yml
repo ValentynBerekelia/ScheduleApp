@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1634532h
+      POSTGRES_DB: scheduledb
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      retries: 5
+    networks:
+      - scheduleapp-network
+    restart: unless-stopped
+
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Username=postgres;Password=1634532h;Database=scheduledb;
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - scheduleapp-network
+    restart: unless-stopped
+
+networks:
+  scheduleapp-network:
+    driver: bridge
