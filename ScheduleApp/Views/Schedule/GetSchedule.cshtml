@@ -113,17 +113,17 @@
                     const groupInput = document.getElementById('groupInput');
 
                     function updateInputs() {
-                        if (teacherInput.value.trim() !== "") {
-                            groupInput.disabled = true;
-                        } else {
-                            groupInput.disabled = false;
-                        }
+                    if (teacherInput.value.trim() !== "") {
+                    groupInput.disabled = true;
+                    } else {
+                    groupInput.disabled = false;
+                    }
 
-                        if (groupInput.value.trim() !== "") {
-                            teacherInput.disabled = true;
-                        } else {
-                            teacherInput.disabled = false;
-                        }
+                    if (groupInput.value.trim() !== "") {
+                    teacherInput.disabled = true;
+                    } else {
+                    teacherInput.disabled = false;
+                    }
                     }
 
                     teacherInput.addEventListener('input', updateInputs);
@@ -151,8 +151,10 @@
                 <div class="time">@time</div>
                 @for (int i = 1; i <= 6; i++)
                 {
-                    var lesson = Model.LesoInfos.FirstOrDefault(d => d.Day == ((DayOfWeek)i).ToString().ToUpper() && d.StartTime == time.Split(" - ")[0]);
-                    <div>
+
+                    var lesson = Model.LesoInfos.FirstOrDefault(d => d.Day == ((DayOfWeek)i).ToString().ToUpper() && d.StartTime == time.Split(" - ")[0]);                 
+                    var days = DateTime.Today.DayOfWeek.ToString().ToUpper();
+                    <div style="@(lesson != null && lesson.Day.ToUpper() == days ? "background-color: yellow;" : "")">
                         @if (lesson != null)
                         {
                             <p>

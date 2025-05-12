@@ -27,7 +27,7 @@ public class ScheduleService
     }
 
     public List<TeacherInfo> TeacherList()
-    {     
+    {
         var teachers = context.Roots
             .SelectMany(r => r.Schedule)
             .SelectMany(s => s.Days)
@@ -56,7 +56,7 @@ public class ScheduleService
 
 
     //ScheduleController
-    public List<LessonInfo> SearchForTeacher(string surname) 
+    public List<LessonInfo> SearchForTeacher(string surname)
     {
         List<LessonInfo> listSaturday = new List<LessonInfo>();
         DateTime date = DateTime.Today;
@@ -136,7 +136,7 @@ public class ScheduleService
         }
         return count;
     }
-    public List<LessonInfo> WeekScheduleOutput(string group,bool isEven)
+    public List<LessonInfo> WeekScheduleOutput(string group, bool isEven)
     {
         var listResult = (from root in context.Roots
                           from schedule in root.Schedule
@@ -255,10 +255,7 @@ public class ScheduleService
     public List<LessonInfo> SearchByDate(string group, DateTime date)
     {
         var saturdayRange = context.SaturdayClasses.FirstOrDefault();
-        if (saturdayRange == null)
-        {
-            return new List<LessonInfo> { new LessonInfo { Day = "" } };
-        }
+
         DateTime? startSaturday = null;
         DateTime? endSaturday = null;
         if (saturdayRange != null)
@@ -266,15 +263,15 @@ public class ScheduleService
             startSaturday = saturdayRange.StartSaturday;
             endSaturday = saturdayRange.EndSaturday;
         }
-        DateTime startSemester = DateTime.ParseExact(context.Roots.Select(r => r.Semester.StartDay).First(),"dd/MM/yyyy",CultureInfo.InvariantCulture);
-        if ((date.DayOfWeek == DayOfWeek.Saturday && (date.DayOfYear >= endSaturday.Value.DayOfYear || date.DayOfYear <= startSaturday.Value.DayOfYear))|| date.DayOfWeek == DayOfWeek.Sunday)
+        DateTime startSemester = DateTime.ParseExact(context.Roots.Select(r => r.Semester.StartDay).First(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
+        if ((date.DayOfWeek == DayOfWeek.Saturday && (saturdayRange != null) && (date.DayOfYear >= endSaturday.Value.DayOfYear || date.DayOfYear <= startSaturday.Value.DayOfYear)) || date.DayOfWeek == DayOfWeek.Sunday)
         {
             return new List<LessonInfo> { new LessonInfo { Day = "" } };
         }
 
         if (date.DayOfWeek == DayOfWeek.Saturday && startSaturday != null)
         {
-            return SaturdayOutput(group,startSaturday.Value,date);
+            return SaturdayOutput(group, startSaturday.Value, date);
         }
         bool isEven = OddsOfWeek(startSemester, date) % 2 == 0;
         var lesson = (from root in context.Roots
@@ -298,6 +295,8 @@ public class ScheduleService
                           LessonType = week.LessonType,
                           RoomName = week.Room.Name
                       }).OrderBy(s => s.StartTime).ToList();
+        if (lesson.FirstOrDefault() == null)
+            return new List<LessonInfo> { new LessonInfo { Day = "" } };
         return lesson;
     }
 
@@ -310,7 +309,7 @@ public class ScheduleService
         var saturdayRange = context.SaturdayClasses.FirstOrDefault();
         if (saturdayRange == null)
         {
-            return new List<LessonInfo> { new LessonInfo { Day = "" } };
+            new List<LessonInfo> { new LessonInfo { Day = "" } };////////////////////////////////////////////
         }
         DateTime? startSaturday = null;
         DateTime? endSaturday = null;
@@ -320,7 +319,7 @@ public class ScheduleService
             endSaturday = saturdayRange.EndSaturday;
         }
         DateTime startSemester = DateTime.ParseExact(context.Roots.Select(r => r.Semester.StartDay).First(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
-        if ((date.DayOfWeek == DayOfWeek.Saturday && (date.DayOfYear >= endSaturday.Value.DayOfYear || date.DayOfYear <= startSaturday.Value.DayOfYear)) || date.DayOfWeek == DayOfWeek.Sunday)
+        if ((date.DayOfWeek == DayOfWeek.Saturday && (saturdayRange != null) && (date.DayOfYear >= endSaturday.Value.DayOfYear || date.DayOfYear <= startSaturday.Value.DayOfYear)) || date.DayOfWeek == DayOfWeek.Sunday)
         {
             return new List<LessonInfo> { new LessonInfo { Day = "" } };
         }
@@ -331,41 +330,41 @@ public class ScheduleService
         bool isEven = OddsOfWeek(startSemester, date) % 2 == 0;
 
         var lesson = (from root in context.Roots
-                  from schedule in root.Schedule
-                  from day in schedule.Days
-                  where day.day == date.DayOfWeek.ToString().ToUpper()
-                  from classItem in day.Classes
-                  let teacher = isEven ? classItem.Weeks.Even.Teacher : classItem.Weeks.Odd.Teacher
+                      from schedule in root.Schedule
+                      from day in schedule.Days
                       where day.day == date.DayOfWeek.ToString().ToUpper()
-                  where teacher.Surname + " " + teacher.Name + " " + teacher.Patronymic == surname
-                  let week = isEven ? classItem.Weeks.Even : classItem.Weeks.Odd
-                  group new { schedule, day, classItem } by new
-                  {
-                      teacher.Name,
-                      teacher.Surname,
-                      teacher.Patronymic,
-                      day.day,
-                      week.SubjectForSite,
-                      classItem.Class.StartTime,
-                      classItem.Class.EndTime,
-                      week.LessonType,
-                      RoomName = week.Room.Name
-                  } into g
-                  orderby g.Key.StartTime
-                  select new LessonInfo
-                  {
-                      WeekType = isEven ? "Even" : "Odd",
-                      Day = g.Key.day,
-                      TeacherName = g.Key.Name,
-                      TeacherPatronymic = g.Key.Patronymic,
-                      TeacherSurname = g.Key.Surname,
-                      GroupTitle = string.Join(", ", g.Select(x => x.schedule.Group.Title)),
-                      Subject = g.Key.SubjectForSite,
-                      StartTime = g.Key.StartTime,
-                      EndTime = g.Key.EndTime,
-                      LessonType = g.Key.LessonType,
-                      RoomName = g.Key.RoomName
-                  }).OrderBy(s => s.StartTime).ToList();
+                      from classItem in day.Classes
+                      let teacher = isEven ? classItem.Weeks.Even.Teacher : classItem.Weeks.Odd.Teacher
+                      where day.day == date.DayOfWeek.ToString().ToUpper()
+                      where teacher.Surname + " " + teacher.Name + " " + teacher.Patronymic == surname
+                      let week = isEven ? classItem.Weeks.Even : classItem.Weeks.Odd
+                      group new { schedule, day, classItem } by new
+                      {
+                          teacher.Name,
+                          teacher.Surname,
+                          teacher.Patronymic,
+                          day.day,
+                          week.SubjectForSite,
+                          classItem.Class.StartTime,
+                          classItem.Class.EndTime,
+                          week.LessonType,
+                          RoomName = week.Room.Name
+                      } into g
+                      orderby g.Key.StartTime
+                      select new LessonInfo
+                      {
+                          WeekType = isEven ? "Even" : "Odd",
+                          Day = g.Key.day,
+                          TeacherName = g.Key.Name,
+                          TeacherPatronymic = g.Key.Patronymic,
+                          TeacherSurname = g.Key.Surname,
+                          GroupTitle = string.Join(", ", g.Select(x => x.schedule.Group.Title)),
+                          Subject = g.Key.SubjectForSite,
+                          StartTime = g.Key.StartTime,
+                          EndTime = g.Key.EndTime,
+                          LessonType = g.Key.LessonType,
+                          RoomName = g.Key.RoomName
+                      }).OrderBy(s => s.StartTime).ToList();
         if (lesson.FirstOrDefault() == null)
             return new List<LessonInfo> { new LessonInfo { Day = "" } };
         return lesson;

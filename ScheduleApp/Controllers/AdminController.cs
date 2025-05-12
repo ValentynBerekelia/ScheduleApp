@@ -45,6 +45,9 @@ namespace ScheduleApp.Controllers
         [HttpPost]
         public IActionResult AddData(SaturdayClass saturdaylass)
         {
+            saturdaylass.StartSaturday = saturdaylass.StartSaturday.Date.ToUniversalTime();
+            saturdaylass.EndSaturday = saturdaylass.EndSaturday.Date.ToUniversalTime();
+
             context.SaturdayClasses.Add(saturdaylass);
             context.SaveChanges();
             return RedirectToAction("Dashboard");
