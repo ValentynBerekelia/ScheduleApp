@@ -154,7 +154,7 @@
 
                     var lesson = Model.LesoInfos.FirstOrDefault(d => d.Day == ((DayOfWeek)i).ToString().ToUpper() && d.StartTime == time.Split(" - ")[0]);                 
                     var days = DateTime.Today.DayOfWeek.ToString().ToUpper();
-                    <div style="@(lesson != null && lesson.Day.ToUpper() == days ? "background-color: yellow;" : "")">
+                    <div style="@(lesson != null && lesson.TeacherName != null && lesson.Day.ToUpper() == days ? "background-color: skyblue;" : "")">
                         @if (lesson != null)
                         {
                             <p>
