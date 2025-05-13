@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddDbContext<ApplicationContext>(options =>
-    options.UseNpgsql("Host=localhost;Port=5432;Database=scheduledb;Username=postgres;Password=1634532h"));
+    options.UseNpgsql("DefaultConnection"));
 
 builder.Services.AddTransient<JSONDeserializer>();
 

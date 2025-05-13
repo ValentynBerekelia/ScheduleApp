@@ -40,6 +40,7 @@ public class ScheduleService
                 TeacherPatronymic = c.Weeks.Even.Teacher.Patronymic
             })
             .Distinct()
+            .OrderBy(p=>p.TeacherSurname)
             .ToList();
         var group = context.Roots
             .SelectMany(r => r.Schedule)
@@ -49,6 +50,7 @@ public class ScheduleService
                 GroupTitle = s.Group.Title
             })
             .Distinct()
+            .OrderBy(p => p.GroupTitle)
             .ToList();
         teachers.AddRange(group);
         return teachers;
@@ -194,7 +196,6 @@ public class ScheduleService
 
         int totalDays = (today - saturdayRange.StartSaturday).Days;
         int totalWeek = totalDays / 7;
-        //якщо більше 7 то second
         //проблема з днями(reverse view)
         bool weekType = totalWeek <= 5;// ? FirstWeek : SecondWeek;
         string dayName = ((DayOfWeek)count).ToString().ToUpper();

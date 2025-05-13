@@ -15,7 +15,7 @@ namespace ScheduleApp.Controllers
             this.context = context;
             this.scheduleService = scheduleService;
         }
-        private const string AdminPassword = "1634532h";
+        private const string AdminPassword = "1111";
 
         public IActionResult Login()
         {
