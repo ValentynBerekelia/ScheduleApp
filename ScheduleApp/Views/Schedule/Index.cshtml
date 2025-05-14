@@ -1,40 +1,77 @@
 ﻿@model List<TeacherInfo>
 @{
-    ViewData["Title"] = "Home Page";
+ViewData["Title"] = "Home Page";
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="~/css/site.css" />
+   
 </head>
-<body style="font-family: Arial, sans-serif">
+<body>
+    @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+         <div class="container-fluid"> 
+            <a class="navbar-brand" asp-controller="Admin" asp-action="dashboard">Dashboard</a> 
+         </div> 
+    </nav>*@
+    <div class="background">
+        <div class="content">
+    <div class="box">
+                <form asp-action="GetTeacher" method="get">
+                    <div class="container-1">
+                        <input placeholder="Enter teacher" list="List" type="text" name="Surname" id="teacherInput" />
+                        <datalist id="List">
+                            @foreach (var item in Model)
+                            {
+                                if (item.TeacherSurname != "")
+                                {
+                                    <option value="@item.TeacherSurname @item.TeacherName @item.TeacherPatronymic"></option>
+                                }
+                            }
+                        </datalist>
 
-    <div class="data_1">
-    <form asp-action="GetTeacher" method="get">     
-            <input placeholder="Teacher" list="List" type="text" name="Surname"/>
-            <datalist id="List">
-                @foreach(var item in Model)
-                {
-                    if (item.TeacherSurname != "")
-                    {
-                        <option id="" value="@item.TeacherSurname @item.TeacherName @item.TeacherPatronymic"></option>
+                        <input placeholder="Enter group" list="list" type="text" name="Group" id="groupInput" />
+                        <datalist id="list">
+                            @foreach (var item in Model)
+                            {
+                                <option value="@item.GroupTitle"></option>
+                            }
+                        </datalist>
+
+                        <input type="date" name="Date" />
+                    </div>
+
+                    <div class="container-2">
+                        <input type="submit" value="Відправити" />
+                    </div>
+                </form>
+
+                <script>
+                    const teacherInput = document.getElementById('teacherInput');
+                    const groupInput = document.getElementById('groupInput');
+
+                    function updateInputs() {
+                        if (teacherInput.value.trim() !== "") {
+                            groupInput.disabled = true;
+                        } else {
+                            groupInput.disabled = false;
+                        }
+
+                        if (groupInput.value.trim() !== "") {
+                            teacherInput.disabled = true;
+                        } else {
+                            teacherInput.disabled = false;
+                        }
                     }
-                }
-            </datalist>
 
-            <input placeholder="Group" list="list" type="text" name="Group" />
-            <datalist id="list">
-                @foreach (var item in Model)
-                {
-                    <option id="" value="@item.GroupName"></option>
-                }
-            </datalist>
-            <input type="date" name="Date" />
-
-            <input type="submit" value="Send" />
-    </form>
+                    teacherInput.addEventListener('input', updateInputs);
+                    groupInput.addEventListener('input', updateInputs);
+                </script>
+    </div>
+    </div>
     </div>
 </body>
 </html>

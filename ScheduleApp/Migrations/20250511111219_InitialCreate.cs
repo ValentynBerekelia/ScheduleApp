@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -47,6 +48,22 @@ namespace ScheduleApp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roots", x => x.RootId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SaturdayClasses",
+                columns: table => new
+                {
+                    SaturdayId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StartSaturday = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndSaturday = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    WeekType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SecondWeekType = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SaturdayClasses", x => x.SaturdayId);
                 });
 
             migrationBuilder.CreateTable(
@@ -151,7 +168,7 @@ namespace ScheduleApp.Migrations
                 {
                     DayId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    day = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    day = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ScheduleItemId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -336,6 +353,9 @@ namespace ScheduleApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "Groups");
+
+            migrationBuilder.DropTable(
+                name: "SaturdayClasses");
 
             migrationBuilder.DropTable(
                 name: "Days");
