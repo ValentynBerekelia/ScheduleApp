@@ -1,54 +1,30 @@
-version: '3.8'
+version: '3.7'
 
 services:
-  backend-web-service:
-    image: nginx
-    volumes:
-      - ./docker/nginx/default.conf:/etc/nginx/nginx.conf
-    depends_on:
-      - backend
-    ports:
-      - "80:80"
-    networks:
-      net:
-        ipv4_address: 200.200.0.2
-
-  backend:
+  web:
+    container_name: 'aspnetcoreapp'
+    image: 'aspnetcoreapp'
     build:
       context: .
-      dockerfile: ./docker/dotnet/.dockerfile
-    networks:
-      net:
-        ipv4_address: 200.200.0.3
-
-  bd:
-    image: postgres
-    volumes:
-      - ./docker/bd/:/var/lib/postgresql/data/
-    environment:
-      POSTGRES_PASSWORD: 1634532h
-      POSTGRES_USER: posgres
-      POSTGRES_DB: scheduledb
+      dockerfile: Dockerfile
     ports:
-      - "5432:5432"
-    networks:
-      net:
-        ipv4_address: 200.200.0.4
-
-  administrator:
-    image: admin
-    ports: 
-    - "8080:80"
+     - "8080:8080"
     depends_on:
-      - bd
+     - db
     networks:
-      net:
-        ipv4_address: 200.200.0.5
+      - aspnetcoreapp-network
+
+  db:
+    image: postgres
+    container_name: 'postgresdb'
+    environment:
+      # change this for a "real" app!
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1634532h
+      POSTGRES_DB: scheduledb
+    networks:
+      - aspnetcoreapp-network
 
 networks:
-  net:
-    ipam:
-      driver: default
-      config:
-        - subnet: 200.200.0.0/8
-          gateway: 200.200.0.1
+  aspnetcoreapp-network:
+    driver: bridge

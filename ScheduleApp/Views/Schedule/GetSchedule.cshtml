@@ -105,13 +105,13 @@
                         }
                     </datalist>
 
-                    <input type="date" name="Date"/>
-                    <input type="submit" value="Надіслати" />
+                    <input type="date" name="Date" id="dateTime"/>
+                    <input type="submit" value="Надіслати" style="background-color:forestgreen;color:white;" />
                 </form>
                 <script>
                     const teacherInput = document.getElementById('teacherInput');
                     const groupInput = document.getElementById('groupInput');
-
+                    const dateTime = document.getElementById('dateTime');
                     function updateInputs() {
                     if (teacherInput.value.trim() !== "") {
                     groupInput.disabled = true;
@@ -124,10 +124,16 @@
                     } else {
                     teacherInput.disabled = false;
                     }
-                    }
 
+                    if(teacherInput.value.trim() == "" && groupInput.value.trim() == "") {
+                        dateTime.disabled = true;
+                    } else {
+                        dateTime.disabled = false;
+                    }
+                    }
                     teacherInput.addEventListener('input', updateInputs);
                     groupInput.addEventListener('input', updateInputs);
+                    dateTime.addEventListener('input', updateInputs);
                 </script>
             </div>
 

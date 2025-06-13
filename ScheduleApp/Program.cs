@@ -3,7 +3,6 @@ using ScheduleApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyModel;
 using ScheduleApp.Data;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -13,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddDbContext<ApplicationContext>(options =>
-    options.UseNpgsql("DefaultConnection"));
+    options.UseNpgsql("Server=db;Port=5432;Database=scheduledb;Username=postgres;Password=1634532h"));
 
 builder.Services.AddTransient<JSONDeserializer>();
 
