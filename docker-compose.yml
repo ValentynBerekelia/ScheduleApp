@@ -16,11 +16,11 @@ services:
 
   db:
     image: postgres
-    container_name: 'postgresdb'
+    container_name: 'postgres'
     environment:
       # change this for a "real" app!
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1634532h
+      POSTGRES_PASSWORD: 123456
       POSTGRES_DB: scheduledb
     networks:
       - aspnetcoreapp-network
