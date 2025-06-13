@@ -13,7 +13,7 @@ public class JSONDeserializer
 
     public async Task<Root> GetScheduleData()
     {
-        string url = "http://fmi-schedule.chnu.edu.ua/schedules/full/semester?semesterId=57";
+        string url = "http://fmi-schedule.chnu.edu.ua/schedules/full/semester?semesterId=57";//вивести в appsettings.json
         var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
         string jsonString = await response.Content.ReadAsStringAsync();
