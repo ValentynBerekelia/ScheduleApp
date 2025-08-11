@@ -15,8 +15,8 @@ namespace ScheduleApp.Controllers
     //[ViewComponent]
     public class ScheduleController : Controller
     {
-        private readonly RootRepository _rootRepository;
-        public ScheduleController(RootRepository rootRepository)
+        private readonly ScheduleService _rootRepository;
+        public ScheduleController(ScheduleService rootRepository)
         {
             _rootRepository = rootRepository;
         }
@@ -26,33 +26,44 @@ namespace ScheduleApp.Controllers
             return View(list);
         }
 
-
         [HttpGet]
-        //розклад має виводитись на головній сторінці,а не переходити на інші
-        public IActionResult GetTeacher(string surname,string group,DateTime date)
+        public IActionResult GetSchedule(string surname,string group,DateTime date)
         {
             if (group != null && surname == null && date.Year < 2000)
             {
-                var result = _rootRepository.Group(group);
-                return RedirectToAction("GetGroup", "Group", new { group });
+                var listTeacher = _rootRepository.TeacherList();
+                var result = _rootRepository.SearchByGroup(group);
+                var model = new ViewModel { TeacherInfos = listTeacher, LesoInfos = result };
+                return View("GetSchedule", model);
             }
-            else if(group == null && surname != null && date.Year < 2000)
+            else if (group == null && surname != null && date.Year < 2000)
             {
+                var listTeacher = _rootRepository.TeacherList();
                 var result = _rootRepository.SearchForTeacher(surname);
-                return View("GetTeacher", result);
+                var model = new ViewModel { TeacherInfos = listTeacher, LesoInfos = result };
+                return View("GetSchedule", model);
             }
-            else if(group != null && date.Year >= 2024 && surname == null)
+            else if (group != null && date.Year >= 2024 && surname == null)
             {
+                var listTeacher = _rootRepository.TeacherList();
                 var result = _rootRepository.SearchByDate(group, date);
-                return View("GetTeacher", result);
+                var model = new ViewModel { TeacherInfos = listTeacher, LesoInfos = result };
+                return View("GetSchedule", model);
             }
-            return View("Error");//замінити сторінкою із розкладом на теперішній тиждень для всіх груп
+            else if (surname != null && date.Year >= 2025)
+            {
+                var listTeacher = _rootRepository.TeacherList();
+                var result = _rootRepository.TeacherAndDate(surname, date);
+                var model = new ViewModel { TeacherInfos = listTeacher, LesoInfos = result };
+                return View("GetSchedule", model);
+            }
+            else
+            {
+                var listTeacher = _rootRepository.TeacherList();
+                var error = new List<LessonInfo> { new LessonInfo { Day = "" } };
+                var model = new ViewModel { TeacherInfos = listTeacher, LesoInfos = error };
+                return View("GetSchedule", model);
+            }
         }
     }
-    //Написати ф-цію
-    //Користувач вводить групу + дату => йому виводить розклад на конкретний день +
-    //*враховує навчання по суботам
-    //* враховує вихідний день(неділя , деколи субота)
-    //*парність тижня
-    //required minlength="4" maxlength="8" size="10"
 }

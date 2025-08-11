@@ -1,4 +1,5 @@
-﻿using ScheduleApp.Models;
+﻿using ScheduleApp.Data;
+using ScheduleApp.Models;
 
 namespace ScheduleApp.Services
 {
@@ -14,12 +15,10 @@ namespace ScheduleApp.Services
                 {
                     context.Add(scheduleData);
                     context.SaveChanges();
-                    Console.WriteLine("Дані успішно додано");
                 }
             }
             else
             {
-                Console.WriteLine("Дані вже існують");
             }
         }
     }

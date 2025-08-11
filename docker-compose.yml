@@ -1,0 +1,30 @@
+version: '3.7'
+
+services:
+  web:
+    container_name: 'aspnetcoreapp'
+    image: 'aspnetcoreapp'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+     - "8080:8080"
+    depends_on:
+     - db
+    networks:
+      - aspnetcoreapp-network
+
+  db:
+    image: postgres
+    container_name: 'postgres'
+    environment:
+      # change this for a "real" app!
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: scheduledb
+    networks:
+      - aspnetcoreapp-network
+
+networks:
+  aspnetcoreapp-network:
+    driver: bridge
